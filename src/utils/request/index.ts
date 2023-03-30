@@ -34,21 +34,24 @@ const transform: AxiosTransform = {
       return res.data
     }
     // 错误的时候返回
-    const { data } = res
-    if (!data) {
-      throw new Error('请求接口错误')
+    const { data, headers } = res
+
+    if ('application/json' == headers['content-type']) {
+      //走框架标准逻辑
+      if (!data) {
+        throw new Error('请求接口错误')
+      }
+      //  这里 code为 后台统一的字段，需要在 types.ts内修改为项目自己的接口返回格式
+      const { code } = data
+      // 这里逻辑可以根据项目进行修改
+      const hasSuccess = data && code === 0
+      if (hasSuccess) {
+        return data.data
+      }
+      throw new Error(`请求接口错误, 错误码: ${code}`)
+    } else {
+      return res
     }
-
-    //  这里 code为 后台统一的字段，需要在 types.ts内修改为项目自己的接口返回格式
-    const { code } = data
-
-    // 这里逻辑可以根据项目进行修改
-    const hasSuccess = data && code === 0
-    if (hasSuccess) {
-      return data.data
-    }
-
-    throw new Error(`请求接口错误, 错误码: ${code}`)
   },
 
   // 请求前处理配置
@@ -185,7 +188,7 @@ function createAxios(opt?: Partial<CreateAxiosOptions>) {
           // 接口前缀
           // 例如: https://www.baidu.com/api
           // urlPrefix: '/api'
-          urlPrefix: '/api',
+          urlPrefix: '/',
           // 是否返回原生响应头 比如：需要获取响应头时使用该属性
           isReturnNativeResponse: false,
           // 需要对返回数据进行处理

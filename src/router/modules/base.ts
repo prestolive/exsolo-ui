@@ -29,6 +29,12 @@ export default [
       },
 
       {
+        path: '/ex-kit-console/api-manage',
+        name: 'requestmapping manage',
+        component: () => import('@/pages/ex-kit-console/ApiManage.vue'),
+        meta: { title: 'RequestMapping管理' },
+      },
+      {
         path: '/ex-kit-console/ds-manage',
         name: 'ds manage',
         component: () => import('@/pages/ex-kit-console/DataRenderList.vue'),

@@ -71,6 +71,7 @@ const handleRouterTabClose = (routeIdx: number) => {
   position: sticky;
   top: 0px;
   left: 0px;
+  z-index: 2;
 }
 .c-router-tab {
   background: #eee;

@@ -117,7 +117,7 @@ const handleLoadData = () => {
     pagination: pageObject?.value?.pagination,
   }
   loading.value = true
-  post('/ex-kit-console/items', arg)
+  post('api/ex-kit-console/items', arg)
     .then((data) => {
       pageObject.value = data
     })
@@ -147,7 +147,7 @@ const onTreeActive = (
 }
 
 const initTags = () => {
-  get('/ex-kit-console/item-tags', null)
+  get('api/ex-kit-console/item-tags', null)
     .then((tags: ItemTagPO[]) => {
       items.value = anyTreeData(
         tags,

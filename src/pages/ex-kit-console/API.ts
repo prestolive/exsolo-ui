@@ -36,18 +36,57 @@ export interface ExKitConsoleItemsParam {
   keyword?: string | null
   pagination?: Pagination
 }
+export interface ApiPreviewResp {
+  module: string
+  clz: string
+}
+
+export interface ApiDocBO {
+  path: string
+  method: string
+  name: string
+  nameLower: string
+  returnType: ApiDocTypeBO
+  paramTypes: ApiDocTypeBO[]
+}
+
+export interface ApiDocTypeBO {
+  clz: string
+  datatype: string
+  name: string
+  tsType: string
+  object: boolean
+  listType: boolean
+  fieldTypes: ApiDocTypeBO[]
+}
 
 interface GET {
-  '/ex-kit-console/item-tags': {
+  'api/ex-kit-console/item-tags': {
     req: null
     resp: ItemTagPO[]
   }
 }
 
 interface POST {
-  '/ex-kit-console/items': {
+  'api/ex-kit-console/items': {
     req: ExKitConsoleItemsParam
     resp: PageObject<ItemPO>
+  }
+  'api/ex-kit-console/api-previews': {
+    req: null
+    resp: ApiPreviewResp[]
+  }
+  'api/ex-kit-console/api-doc': {
+    req: {
+      className: string
+    }
+    resp: ApiDocBO[]
+  }
+  'api/ex-kit-console/api-doc2code': {
+    req: {
+      className: string
+    }
+    resp: null
   }
 }
 
@@ -68,4 +107,7 @@ export function post<URL extends keyof POST>(
     url,
     params,
   })
+}
+export function download(url: string, params: object): Promise<null> {
+  return request.download({ url, params })
 }
