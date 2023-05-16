@@ -173,7 +173,7 @@ onMounted(() => {
 
 <style scoped>
 .main {
-  margin: 12px;
+  margin: 8px;
   /* padding: 24px; */
   background: #fff;
   min-height: 600px;
@@ -195,7 +195,6 @@ onMounted(() => {
   padding: 12px;
 }
 .item-table {
-  border-left: 1px solid #e8e8e8;
   padding: 12px;
 }
 .bread {

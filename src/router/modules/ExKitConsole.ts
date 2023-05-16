@@ -1,4 +1,4 @@
-import console from '@/console/ConsoleIndex.vue'
+import console from '@/console/layout/ConsoleIndex.vue'
 import BaseBlock from '@/assets/icon/BaseBlock.svg'
 
 export default [

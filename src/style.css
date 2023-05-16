@@ -121,3 +121,38 @@ li {
   margin-top: 8px;
   animation: turn 1s linear infinite;
 }
+
+/* 框架部分 */
+.ex-cond-item {
+  font-size: 0.9em;
+  line-height: 1.2em;
+  display: flex;
+  position: relative;
+  justify-content: flex-start;
+  color: #415bc9;
+  border-radius: 3px;
+  margin-right: 6px;
+  transition: padding-right 0.15s;
+}
+.ex-cond-item.desc {
+  background: #f2f3ff;
+  padding: 7px 32px 7px 12px;
+  height: 32px;
+}
+.ex-cond-title {
+  padding-right: 8px;
+}
+.ex-cond-value {
+  font-weight: 600;
+}
+.ex-cond-close {
+  position: absolute;
+  right: 8px;
+  top: 8px;
+  cursor: pointer;
+  color: rgba(0, 0, 0, 0.2);
+}
+.ex-cond-close:hover {
+  font-weight: 600;
+  color: rgba(0, 0, 0, 0.45);
+}

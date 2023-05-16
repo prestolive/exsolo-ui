@@ -89,7 +89,7 @@ const onCurrentChange = (index: number, pageInfo: PageInfo) => {
 
 <style scoped>
 .main {
-  margin: 12px;
+  margin: 8px;
   padding: 24px;
   background: #fff;
   min-height: 600px;

@@ -1,28 +1,43 @@
 import { ref } from 'vue'
 
 import { defineStore } from 'pinia'
-import { TRouterInfo, TTabRouterType } from './routerTabs.d'
+import { RouterTabItem } from './routerTabs.d'
 
 export const useRouterTabsStore = defineStore('router-tabs', () => {
-  const routerTabsList = ref<TRouterInfo>([])
+  const routerTabsList = ref<RouterTabItem[]>([])
 
-  const addRouterTab = (newRoute: TRouterInfo) => {
-    let exist
-    routerTabsList.value.forEach((row) => {
-      row.isAlive = false
-      if (row.path == newRoute.path) {
-        row.isAlive = true
-        exist = row
+  const addRouterTab = (newRoute: RouterTabItem) => {
+    let exists = false
+    routerTabsList.value.forEach((row, idx) => {
+      if (row) {
+        if (row.path == newRoute.path) {
+          exists = true
+          routerTabsList.value.splice(idx, 1, { ...row, isAlive: true })
+        } else {
+          routerTabsList.value.splice(idx, 1, { ...row, isAlive: false })
+        }
       }
     })
-    if (!exist) {
+    if (!exists) {
       routerTabsList.value.push({ ...newRoute, isAlive: true })
     }
   }
 
-  const closeRouterTab = (routeIdx: number) => {
-    routerTabsList.value = routerTabsList.value.slice(routeIdx)
+  const closeRouterTab = (routeIdx: number): RouterTabItem => {
+    const back =
+      routerTabsList.value[routeIdx + 1] || routerTabsList.value[routeIdx - 1]
+    routerTabsList.value.splice(routeIdx, 1)
+    addRouterTab(back)
+    return back
   }
 
-  return { routerTabsList, addRouterTab, closeRouterTab }
+  const updateRouterTab = () => {
+    routerTabsList.value.forEach((row, idx) => {
+      if (row) {
+        window.console.log(row)
+      }
+    })
+  }
+
+  return { routerTabsList, addRouterTab, closeRouterTab, updateRouterTab }
 })

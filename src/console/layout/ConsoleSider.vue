@@ -14,8 +14,8 @@
   </aside>
 </template>
 <script lang="ts" setup>
-import { getMenu } from './store/permission'
-import ConsoleSiderMenuItem from './components/ConsoleSiderMenuItem.vue'
+import { getMenu } from '@/console/store/permission'
+import ConsoleSiderMenuItem from '@/console/components/ConsoleSiderMenuItem.vue'
 import { ref } from 'vue'
 
 const menu = ref(getMenu())
