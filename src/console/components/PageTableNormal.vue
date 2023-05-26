@@ -95,15 +95,16 @@ interface PageHooksLocal {
   handleInfo: (id: string) => void
   handlePageChange: (pageInfo: PageInfo) => void
   handleConditionChange?: (params: object) => void
+  handleRefresh?: () => void
 }
 
 const props = defineProps<PageHooksLocal>()
 
 provide('conditions', props.conditions)
+
 const pageHooks = reactive<PageHooksLocal>(props)
 
 const handleQueryPanelChange = (items: Array<ConditionItem>) => {
-  window.console.log('items', items)
   pageHooks.handleConditionChange &&
     pageHooks.handleConditionChange({ cond: items })
 }

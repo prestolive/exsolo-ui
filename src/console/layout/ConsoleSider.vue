@@ -26,6 +26,8 @@ const menu = ref(getMenu())
   position: relative;
   box-sizing: border-box;
   border-right: 1px dashed #ccc;
+  background: #fafafa;
+  /* background: #f2f2f2; */
 }
 
 .c-side-main {
@@ -39,6 +41,7 @@ const menu = ref(getMenu())
   height: 48px;
   width: auto;
   border-bottom: 1px dashed #ccc;
+  background: #fff;
 }
 
 .c-menu {

@@ -22,7 +22,7 @@
       </div>
       <div class="item-block">
         <h1>登录名</h1>
-        <span>{{ vo?.userCode }}</span>
+        <span>{{ vo?.loginCode }}</span>
       </div>
       <div class="item-block">
         <h1>称呼</h1>
@@ -83,9 +83,8 @@ if (props.userId) {
 const vo = ref<UserPO>()
 
 const handleLoadData = (userId: string) => {
-  post('api/ex-basic/security/user-info', { userId: userId }).then((data) => {
+  post('api/ex-basic/user/info', { userId: userId }).then((data) => {
     vo.value = { ...data }
-    routerTabsStroe.updateRouterTab()
   })
 }
 

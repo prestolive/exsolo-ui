@@ -46,8 +46,9 @@ const handleRouterTabActive = (routerTab: RouterTabItem) => {
 
 const handleRouterTabClose = (routeIdx: number) => {
   window.console.log('close', routeIdx)
-  const back = routerTabsStroe.closeRouterTab(routeIdx)
-  router.push({ path: back.path, query: back.query })
+  const back = routerTabsStroe.closeRouterTab2(routeIdx)
+  router.removeRoute(back.name)
+  // router.push({ path: back.path, query: back.query })
 }
 
 const handleAppendTab = () => {

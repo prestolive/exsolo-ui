@@ -9,7 +9,7 @@
     >
       <t-form-item label="登录名">
         <t-input
-          v-model="vo.userCode"
+          v-model="vo.loginCode"
           placeholder="英文数字4~12个字符"
           disabled
         ></t-input>
@@ -72,7 +72,7 @@ const userId = ref(props.userId)
 const vo = ref<UserPO>({})
 
 const handleLoadData = (userId: string) => {
-  post('api/ex-basic/security/user-info', { userId: userId }).then((data) => {
+  post('api/ex-basic/user/info', { userId: userId }).then((data) => {
     vo.value = { ...data }
   })
 }
@@ -94,7 +94,7 @@ const form = ref<FormInstanceFunctions>()
 const handleSubmit = (context: SubmitContext) => {
   const { validateResult, firstError } = context
   if (validateResult === true) {
-    post('api/ex-basic/security/user-change-password', {
+    post('api/ex-basic/user/change-password', {
       userId: userId.value,
       password: formData.value.password,
     }).then(() => {

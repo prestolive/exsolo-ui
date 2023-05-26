@@ -1,4 +1,4 @@
-import { request } from '@/utils/request/index.ts'
+import { request } from '@/utils/request/index'
 
 export interface UserVO {
   name: string

@@ -7,9 +7,9 @@
     @reset="handleReset"
     @submit="handleSubmit"
   >
-    <t-form-item label="登录名" name="userCode">
+    <t-form-item label="登录名" name="loginCode">
       <t-input
-        v-model="formData.userCode"
+        v-model="formData.loginCode"
         placeholder="英文数字4~12个字符"
       ></t-input>
     </t-form-item>
@@ -62,10 +62,10 @@ const emit = defineEmits(['finish', 'change'])
 
 const FORM_RULES = {
   userName: [{ required: true, message: '称呼必填' }],
-  userCode: [
+  loginCode: [
     { required: true, message: '登录名必填' },
     {
-      pattern: /^[a-z]([_a-zA-Z0-9]{4,20})$/,
+      pattern: /^[a-z]([_a-zA-Z0-9]{3,20})$/,
       message: '小写英文字母、数字4~20个字符',
     },
   ],
@@ -83,7 +83,7 @@ const handleSubmit = (context: SubmitContext) => {
   const { validateResult, firstError } = context
   if (validateResult === true) {
     // MessagePlugin.success('提交成功')
-    post('api/ex-basic/security/user-add', {
+    post('api/ex-basic/user/add', {
       userPO: formData.value,
       password: password.value,
     }).then(() => {
@@ -97,13 +97,6 @@ const handleSubmit = (context: SubmitContext) => {
     console.log('Validate Errors: ', firstError, validateResult)
     MessagePlugin.warning(firstError || '')
   }
-}
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const validateOnly = async () => {
-  const result = await form.value?.validateOnly()
-  MessagePlugin.success('打开控制台查看校验结果')
-  console.log('validateOnly', result)
 }
 
 const handleGenerateRandomPassword = () => {

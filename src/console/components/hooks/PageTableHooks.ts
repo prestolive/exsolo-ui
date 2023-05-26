@@ -16,6 +16,7 @@ export interface PageHooks<T> {
   handleInfo: (id: string) => void
   handlePageChange?: (pageInfo: PageInfo) => void
   handleConditionChange?: (params: object) => void
+  handleRefresh?: () => void
 }
 export function useNormalPage<T>(props: PageHooks<T>) {
   const { loadData } = props
@@ -57,6 +58,11 @@ export function useNormalPage<T>(props: PageHooks<T>) {
       //刷新条件默认返回第一页
       pageObject.value.pagination.current = 1
       handleLoadData(params)
+    }
+  }
+  if (props.handleRefresh == undefined) {
+    props.handleRefresh = () => {
+      handleLoadData(currParams)
     }
   }
   onMounted(() => {

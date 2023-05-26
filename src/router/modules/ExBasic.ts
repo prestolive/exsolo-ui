@@ -21,6 +21,18 @@ export default [
         component: () => import('@/pages/ex-basic/user/UserInfo.vue'),
         meta: { title: '用户基本信息', hidden: true },
       },
+      {
+        path: '/ex-basic/role-manage',
+        name: 'role-manage',
+        component: () => import('@/pages/ex-basic/role/RoleManage.vue'),
+        meta: { title: '角色管理' },
+      },
+      {
+        path: '/ex-basic/role-info/:roleId',
+        name: 'role-info',
+        component: () => import('@/pages/ex-basic/role/RoleInfo.vue'),
+        meta: { title: '角色详情' },
+      },
     ],
   },
 ]

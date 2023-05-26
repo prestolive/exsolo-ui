@@ -8,18 +8,20 @@
 import { h } from 'vue'
 
 import { post, UserPO } from '../API'
-import UserFormAdd from './UserFormAdd.vue'
-import UserInfo from './UserInfo.vue'
+import RoleFormAdd from './RoleFormAdd.vue'
 import PageTableNormal from '@/console/components/PageTableNormal.vue'
 import { BaseTableCol, Pagination, BaseConditionCol } from '@/console/type'
 import { useNormalPage } from '@/console/components/hooks/PageTableHooks'
 import Glue from '@/console/Glue'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
 
 const columns: BaseTableCol[] = [
-  { colKey: 'loginCode', title: '登录名', width: 120 },
-  { colKey: 'userName', title: '称呼', width: 120, ellipsis: true },
-  { colKey: 'activeTs', title: '创建时间', width: 120, ellipsis: true },
-  { colKey: 'status', title: '状态', width: 120 },
+  { colKey: 'roleName', title: '角色名称' },
+  { colKey: 'roleSchema', title: '角色类型', width: 150 },
+  { colKey: 'moduleCount', title: '关联模块数量', width: 150 },
+  { colKey: 'powerCount', title: '关联权限数量', width: 150 },
   {
     colKey: 'action',
     title: '操作',
@@ -29,23 +31,9 @@ const columns: BaseTableCol[] = [
 ]
 const conditions: BaseConditionCol[] = [
   {
-    key: 'loginCode',
-    title: '登录名',
+    key: 'roleName',
+    title: '角色名称',
     schema: 'text',
-  },
-  {
-    key: 'userName',
-    title: '姓名',
-    schema: 'text',
-  },
-  {
-    key: 'status',
-    title: '状态',
-    schema: 'option',
-    options: [
-      { value: 'NORMAL', label: '正常' },
-      { value: 'BLOCK', label: '锁定' },
-    ],
   },
 ]
 
@@ -53,7 +41,7 @@ const pageBind = useNormalPage<UserPO>({
   columns: columns,
   conditions: conditions,
   loadData: (param: object, pagination: Pagination) => {
-    return post('api/ex-basic/user/page', {
+    return post('api/ex-basic/role/page', {
       ...param,
       pagination: pagination,
     })
@@ -61,7 +49,7 @@ const pageBind = useNormalPage<UserPO>({
   handleAdd: () => {
     Glue.drawer(
       { title: '新增用户', width: '720px' },
-      h(UserFormAdd, {
+      h(RoleFormAdd, {
         onChange: () => {
           pageBind.handleRefresh && pageBind.handleRefresh()
         },
@@ -69,16 +57,16 @@ const pageBind = useNormalPage<UserPO>({
     )
   },
   handleInfo: (id: string) => {
-    Glue.drawer(
-      { title: '用户详情', width: '720px' },
-      h(UserInfo, {
-        userId: id,
-        onChange: () => {
-          pageBind.handleRefresh && pageBind.handleRefresh()
-        },
-      })
-    )
-    // router.push('/ex-basic/user-info/' + userId)
+    // Glue.drawer(
+    //   { title: '用户详情', width: '720px' },
+    //   h(UserInfo, {
+    //     userId: id,
+    //     onChange: () => {
+    //       // handleLoadData()
+    //     },
+    //   })
+    // )
+    router.push('/ex-basic/role-info/' + id)
   },
 })
 </script>

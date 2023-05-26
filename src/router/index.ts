@@ -6,6 +6,7 @@ import {
 } from 'vue-router'
 import uniq from 'lodash/uniq'
 import web404 from '@/console/pages/web404.vue'
+import Login from '@/console/pages/Login.vue'
 
 const env = import.meta.env.MODE || 'development'
 
@@ -29,8 +30,8 @@ export const asyncRouterList: Array<RouteRecordRaw> = [...routeModuleList]
 // 存放固定的路由
 const defaultRouterList: Array<RouteRecordRaw> = [
   {
-    path: '/',
-    redirect: '/ex-kit-console/item-manage',
+    path: '/login',
+    component: Login,
   },
   {
     path: '/:w+',

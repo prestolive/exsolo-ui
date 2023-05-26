@@ -119,7 +119,7 @@ const getActiveStyle = (item) => {
 
 li a {
   text-decoration: none;
-  color: rgba(0, 0, 0, 0.6);
+  color: rgba(0, 0, 0, 0.8);
   display: block;
 }
 
