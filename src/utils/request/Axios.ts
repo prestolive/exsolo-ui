@@ -8,7 +8,7 @@ import axios, {
 import { stringify } from 'qs'
 import isFunction from 'lodash/isFunction'
 import cloneDeep from 'lodash/cloneDeep'
-import { CreateAxiosOptions } from './AxiosTransform'
+import { CreateAxiosOptions } from './index.d'
 import { AxiosCanceler } from './AxiosCancel'
 import { AxiosRequestConfigRetry, RequestOptions, Result } from '@/types/axios'
 
@@ -162,31 +162,30 @@ export class VAxios {
   ): Promise<T> {
     return this.request({ ...config, method: 'PATCH' }, options)
   }
-
-  download(config: AxiosRequestConfig, options?: RequestOptions): Promise<any> {
-    return this.request({ ...config, method: 'POST' }, options).then((res) => {
-      const { data, headers } = res
-      if (data) {
-        const fileName = headers['content-disposition'].replace(
-          /\w+;filename=(.*)/,
-          '$1'
-        )
-        window.console.log('#########', headers['content-type'])
-        window.console.log('#########', fileName)
-        // 此处当返回json文件时需要先对data进行JSON.stringify处理，其他类型文件不用做处理
-        //const blob = new Blob([JSON.stringify(data)], ...)
-        const blob = new Blob([data], { type: headers['content-type'] })
-        const dom = document.createElement('a')
-        const url = window.URL.createObjectURL(blob)
-        dom.href = url
-        dom.download = decodeURI(fileName)
-        dom.style.display = 'none'
-        document.body.appendChild(dom)
-        dom.click()
-        dom.parentNode.removeChild(dom)
-        window.URL.revokeObjectURL(url)
-      }
-    })
+  async download(
+    config: AxiosRequestConfig,
+    options?: RequestOptions
+  ): Promise<any> {
+    const res = await this.request({ ...config, method: 'POST' }, options)
+    const { data, headers } = res
+    if (data) {
+      const fileName = headers['content-disposition'].replace(
+        /\w+;filename=(.*)/,
+        '$1'
+      )
+      // 此处当返回json文件时需要先对data进行JSON.stringify处理，其他类型文件不用做处理
+      //const blob = new Blob([JSON.stringify(data)], ...)
+      const blob = new Blob([data], { type: headers['content-type'] })
+      const dom = document.createElement('a')
+      const url = window.URL.createObjectURL(blob)
+      dom.href = url
+      dom.download = decodeURI(fileName)
+      dom.style.display = 'none'
+      document.body.appendChild(dom)
+      dom.click()
+      dom.parentNode.removeChild(dom)
+      window.URL.revokeObjectURL(url)
+    }
   }
 
   // 请求
@@ -226,14 +225,27 @@ export class VAxios {
           resolve(res as unknown as Promise<T>)
         })
         .catch((e: Error | AxiosError) => {
-          if (requestCatchHook && isFunction(requestCatchHook)) {
-            reject(requestCatchHook(e, opt))
-            return
-          }
           if (axios.isAxiosError(e)) {
-            // 在这里重写Axios的错误信息
+            //401
+            const status = e.request.status
+            if (status === 401) {
+              //todo
+              alert(status)
+            } else if (status === 403) {
+              alert(status)
+            } else if (status === 500) {
+              if (requestCatchHook && isFunction(requestCatchHook)) {
+                reject(requestCatchHook(e, opt))
+                return
+              } else {
+                reject(e)
+                return
+              }
+            }
+          } else {
+            //TODO 直接放出消息，但是不做任何处理
+            alert(e.cause)
           }
-          reject(e)
         })
     })
   }

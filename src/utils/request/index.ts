@@ -1,11 +1,13 @@
 // axios配置  可自行根据项目进行更改，只需更改该文件即可，其他文件可以不动
 import isString from 'lodash/isString'
 import merge from 'lodash/merge'
-import type { AxiosTransform, CreateAxiosOptions } from './AxiosTransform'
+import type { AxiosTransform, CreateAxiosOptions } from './index.d'
+import { ExError } from './index.d'
 import { VAxios } from './Axios'
 import proxy from '@/config/proxy'
-import { joinTimestamp, formatRequestDate, setObjToUrlParams } from './utils'
+import { joinTimestamp, formatRequestDate } from './utils'
 import { TOKEN_NAME } from '@/config/global'
+import { AxiosError } from 'axios'
 
 const env = import.meta.env.MODE || 'development'
 
@@ -41,17 +43,29 @@ const transform: AxiosTransform = {
       if (!data) {
         throw new Error('请求接口错误')
       }
-      //  这里 code为 后台统一的字段，需要在 types.ts内修改为项目自己的接口返回格式
-      const { code } = data
-      // 这里逻辑可以根据项目进行修改
-      const hasSuccess = data && code === 0
-      if (hasSuccess) {
-        return data.data
+      if (res.status === 200) {
+        //  这里 code为 后台统一的字段，需要在 types.ts内修改为项目自己的接口返回格式
+        const { code } = data
+        // 这里逻辑可以根据项目进行修改
+        const hasSuccess = data && code === 0
+        if (hasSuccess) {
+          return data.data
+        }
+      } else {
+        //感觉不会走到这里
+        alert(`感觉不会走到这里, http: ${res.status}`)
+        throw new Error(`感觉不会走到这里, http: ${res.status}`)
       }
-      throw new Error(`请求接口错误, 错误码: ${code}`)
     } else {
       return res
     }
+  },
+  requestCatchHook: (e: AxiosError, opt) => {
+    return new ExError(
+      e.response?.data.errmsg,
+      e.response?.data.errcode,
+      e.response?.data.data || {}
+    )
   },
 
   // 请求前处理配置
@@ -60,7 +74,6 @@ const transform: AxiosTransform = {
       apiUrl,
       isJoinPrefix,
       urlPrefix,
-      joinParamsToUrl,
       formatDate,
       joinTime = true,
     } = options
@@ -107,12 +120,6 @@ const transform: AxiosTransform = {
         // 非GET请求如果没有提供data，则将params视为data
         config.data = params
         config.params = undefined
-      }
-      if (joinParamsToUrl) {
-        config.url = setObjToUrlParams(config.url as string, {
-          ...config.params,
-          ...config.data,
-        })
       }
     } else {
       // 兼容restful风格

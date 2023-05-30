@@ -1,6 +1,8 @@
 import type { AxiosRequestConfig, AxiosResponse } from 'axios'
 import { AxiosError } from 'axios'
 import type { RequestOptions, Result } from '@/types/axios'
+import { mapState } from 'pinia'
+import { times } from 'lodash'
 
 // 创建Axios选项
 export interface CreateAxiosOptions extends AxiosRequestConfig {
@@ -27,10 +29,7 @@ export abstract class AxiosTransform {
   ) => any
 
   // 请求失败处理
-  requestCatchHook?: (
-    e: Error | AxiosError,
-    options: RequestOptions
-  ) => Promise<any>
+  requestCatchHook?: (e: Error | AxiosError, options: RequestOptions) => ExError
 
   // 请求前的拦截器
   requestInterceptors?: (
@@ -46,4 +45,14 @@ export abstract class AxiosTransform {
 
   // 请求后的拦截器错误处理
   responseInterceptorsCatch?: (error: AxiosError) => void
+}
+
+export class ExError extends Error {
+  constructor(message?: string, code?: string, data?: any) {
+    super(message)
+    this.code = code
+    this.data = data
+  }
+  code: string
+  data: any
 }

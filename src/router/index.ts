@@ -7,6 +7,8 @@ import {
 import uniq from 'lodash/uniq'
 import web404 from '@/console/pages/web404.vue'
 import Login from '@/console/pages/Login.vue'
+import Home from '@/console/pages/Home.vue'
+import console from '@/console/layout/ConsoleIndex.vue'
 
 const env = import.meta.env.MODE || 'development'
 
@@ -30,14 +32,26 @@ export const asyncRouterList: Array<RouteRecordRaw> = [...routeModuleList]
 // 存放固定的路由
 const defaultRouterList: Array<RouteRecordRaw> = [
   {
+    path: '/',
+    component: console,
+    children: [
+      {
+        path: '/',
+        name: 'home',
+        component: Home,
+        meta: { title: '首页' },
+      },
+    ],
+  },
+  {
     path: '/login',
     component: Login,
   },
-  {
-    path: '/:w+',
-    name: '404Page w+',
-    redirect: '/result/404',
-  },
+  // {
+  //   path: '/:w+',
+  //   name: '404Page w+',
+  //   redirect: '/result/404',
+  // },
   {
     path: '/result/404',
     name: '404Page',
