@@ -9,6 +9,7 @@ import web404 from '@/console/pages/web404.vue'
 import Login from '@/console/pages/Login.vue'
 import Home from '@/console/pages/Home.vue'
 import console from '@/console/layout/ConsoleIndex.vue'
+import HomeIcon from '@/assets/icon/Home.svg'
 
 const env = import.meta.env.MODE || 'development'
 
@@ -28,6 +29,11 @@ Object.keys(modules).forEach((key) => {
 
 // 存放动态路由
 export const asyncRouterList: Array<RouteRecordRaw> = [...routeModuleList]
+asyncRouterList.unshift({
+  path: '/',
+  name: 'home',
+  meta: { title: '首页', icon: HomeIcon },
+})
 
 // 存放固定的路由
 const defaultRouterList: Array<RouteRecordRaw> = [

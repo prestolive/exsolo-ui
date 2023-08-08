@@ -9,7 +9,10 @@
           </div>
         </div>
         <t-space class="operate">
-          <t-button theme="default" variant="base" @click="handleModify">
+          <t-button theme="default" @click="handlePermissionSet">
+            <template #icon> <lock-on-icon /></template>分配权限
+          </t-button>
+          <t-button theme="default" @click="handleModify">
             <template #icon> <edit-icon /></template>修改名称
           </t-button>
           <t-button theme="default" variant="text" @click="handleDelete">
@@ -39,11 +42,12 @@ import {
   MessagePlugin,
   DialogPlugin,
 } from 'tdesign-vue-next'
-import { EditIcon, DeleteIcon } from 'tdesign-icons-vue-next'
+import { EditIcon, DeleteIcon, LockOnIcon } from 'tdesign-icons-vue-next'
 import { post, RoleInfoVO, UserPO } from '../API'
 import { useRoute, useRouter } from 'vue-router'
 import { useRouterTabsStore } from '@/console/store/routerTabs'
 import RoleFormModify from './RoleFormModify.vue'
+import RoleFormPermissionSet from './RoleFormPermissionSet.vue'
 import Glue from '@/console/Glue'
 
 const props = defineProps({
@@ -81,8 +85,19 @@ watchEffect(() => {
 
 const handleModify = () => {
   Glue.drawer(
-    { title: '修改用户', width: '520px' },
+    { title: '修改名称', width: '520px' },
     h(RoleFormModify, {
+      roleId: roleId.value,
+      onChange: () => {
+        handleLoadData(roleId.value)
+      },
+    })
+  )
+}
+const handlePermissionSet = () => {
+  Glue.drawer(
+    { title: '修改权限', width: '80%' },
+    h(RoleFormPermissionSet, {
       roleId: roleId.value,
       onChange: () => {
         handleLoadData(roleId.value)
@@ -109,13 +124,12 @@ const handleDelete = () => {
 </script>
 
 <style scoped>
-.operate {
-}
 .header {
+  padding: 8px 16px;
   display: flex;
   justify-content: space-between;
-  margin-bottom: 24px;
   align-items: flex-end;
+  background: #f9fafc;
 }
 .role-name {
   display: flex;
@@ -123,10 +137,10 @@ const handleDelete = () => {
   align-items: flex-end;
 }
 .info {
-  padding: 24px;
+  /* padding: 8px 16px; */
 }
 .info h1 {
-  font-size: 2em;
+  font-size: 1.5em;
   margin-block-start: 0em;
   margin-block-end: 0em;
 }

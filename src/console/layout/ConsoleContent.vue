@@ -17,7 +17,7 @@
 .c-content {
   height: calc(100vh - 85px);
   position: relative;
-  background-color: #eee;
+  background-color: #fff;
   overflow-y: scroll;
 }
 

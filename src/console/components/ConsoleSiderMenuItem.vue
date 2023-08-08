@@ -2,16 +2,21 @@
   <li>
     <div :class="isOpen ? 'c-menu-block open' : 'c-menu-block'" @click="toggle">
       <!-- <span v-html="model.meta.icon"></span> -->
-      <component :is="model?.meta.icon?.render"></component>
-      <component :is="!model?.meta.icon && ConsoleDefaultMenu"></component>
-      <!-- <BaseBlock></BaseBlock> -->
-      {{ model?.meta.title }}
-      <span class="c-menu-toggle">
+      <div>
+        <component :is="model?.meta.icon?.render"></component>
+        <component :is="!model?.meta.icon && ConsoleDefaultMenu"></component>
+        <!-- <BaseBlock></BaseBlock> -->
+        {{ model?.meta.title }}
+      </div>
+      <span v-if="model?.children" class="c-menu-toggle">
         <DirectRight v-if="!isOpen" />
         <DirectDown v-if="isOpen" />
       </span>
     </div>
-    <ul :class="isOpen ? 'c-menu-sub active' : 'c-menu-sub'">
+    <ul
+      v-if="model?.children"
+      :class="isOpen ? 'c-menu-sub active' : 'c-menu-sub'"
+    >
       <li
         v-for="item in model?.children"
         :key="item.path"
@@ -55,9 +60,12 @@ const getActiveStyle = (item) => {
   line-height: 36px;
   margin-left: 6px;
   padding-left: 28px;
+  padding-right: 12px;
   position: relative;
   font-size: 0.9em;
   letter-spacing: 1px;
+  display: flex;
+  justify-content: space-between;
 }
 
 .c-menu-block.open {

@@ -12,6 +12,10 @@
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
 }
+body {
+  /* --td-bg-color-container: #f9fafc;
+  --td-bg-color-secondarycontainer: #fff; */
+}
 
 * {
   box-sizing: border-box;

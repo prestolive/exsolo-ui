@@ -10,7 +10,11 @@
           :class="routerTab.isAlive ? 'c-router-tab active' : 'c-router-tab'"
           @click="handleRouterTabActive(routerTab)"
         >
-          <div class="c-router-close" @click.stop="handleRouterTabClose(index)">
+          <div
+            v-if="!(routerTab.path == '/' || routerTabsList.length == 1)"
+            class="c-router-close"
+            @click.stop="handleRouterTabClose(index)"
+          >
             x
           </div>
           {{ routerTab.meta.title }}
@@ -46,9 +50,8 @@ const handleRouterTabActive = (routerTab: RouterTabItem) => {
 
 const handleRouterTabClose = (routeIdx: number) => {
   window.console.log('close', routeIdx)
-  const back = routerTabsStroe.closeRouterTab2(routeIdx)
-  router.removeRoute(back.name)
-  // router.push({ path: back.path, query: back.query })
+  const back = routerTabsStroe.closeRouterTab(routeIdx)
+  router.replace({ path: back.path, query: back.query })
 }
 
 const handleAppendTab = () => {

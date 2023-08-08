@@ -22,18 +22,11 @@ export const useRouterTabsStore = defineStore('router-tabs', () => {
       routerTabsList.value.push({ ...newRoute, isAlive: true })
     }
   }
-  const closeRouterTab2 = (routeIdx: number): RouterTabItem => {
-    const curr = routerTabsList.value[routeIdx]
-    routerTabsList.value.splice(routeIdx, 1)
-    return curr
-  }
 
   const closeRouterTab = (routeIdx: number): RouterTabItem => {
     const back =
       routerTabsList.value[routeIdx + 1] || routerTabsList.value[routeIdx - 1]
     routerTabsList.value.splice(routeIdx, 1)
-    // route
-    // addRouterTab(back)
     return back
   }
 
@@ -58,7 +51,6 @@ export const useRouterTabsStore = defineStore('router-tabs', () => {
     routerTabsList,
     addRouterTab,
     closeRouterTab,
-    closeRouterTab2,
     closeRouterTabByPath,
     updateRouterTab,
   }

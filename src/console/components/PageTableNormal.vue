@@ -139,7 +139,7 @@ const handleQueryPanelChange = (items: Array<ConditionItem>) => {
 }
 .ex-table {
   /* margin-top: 12px; */
-  width: calc(100vw - 280px);
+  /* width: calc(100vw - 280px); */
 }
 .item-manage {
   display: flex;
