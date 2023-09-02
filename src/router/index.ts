@@ -29,11 +29,6 @@ Object.keys(modules).forEach((key) => {
 
 // 存放动态路由
 export const asyncRouterList: Array<RouteRecordRaw> = [...routeModuleList]
-asyncRouterList.unshift({
-  path: '/',
-  name: 'home',
-  meta: { title: '首页', icon: HomeIcon },
-})
 
 // 存放固定的路由
 const defaultRouterList: Array<RouteRecordRaw> = [

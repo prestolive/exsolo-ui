@@ -114,6 +114,7 @@ const getActiveStyle = (item) => {
 .c-menu-sub li.active {
   background: rgb(242, 243, 255);
   color: #0052d9;
+  border-right: 1px solid #ccc;
 }
 
 .c-menu-sub li.active a {
@@ -123,6 +124,7 @@ const getActiveStyle = (item) => {
 
 .c-menu-sub li:hover {
   background: rgb(243, 243, 243);
+  border-right: 1px solid #ccc;
 }
 
 li a {

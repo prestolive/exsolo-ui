@@ -1,44 +1,30 @@
 <template>
   <div class="c-content">
-    <div class="c-main">
-      <router-view v-slot="{ route, Component }">
-        <transition name="fade" mode="out-in">
-          <keep-alive :key="route.fullPath">
-            <component :is="Component" />
-          </keep-alive>
-        </transition>
-      </router-view>
-    </div>
+    <router-view v-slot="{ route, Component }">
+      <transition name="fade" mode="out-in">
+        <!--key="route.path" 要放在component才对，放在keep-alive会导致缓存失效-->
+        <keep-alive>
+          <component :is="Component" :key="route.path" />
+        </keep-alive>
+      </transition>
+    </router-view>
   </div>
 </template>
 <script lang="ts" setup></script>
 
 <style scoped>
 .c-content {
-  height: calc(100vh - 85px);
+  height: calc(100vh - 38px);
   position: relative;
-  background-color: #fff;
-  overflow-y: scroll;
+  background-color: #f6f7fa;
+  overflow-y: auto;
 }
 
-.c-content::after {
-  content: 'content';
-  position: absolute;
-  top: 12px;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  pointer-events: none;
-  font-size: 0.8em;
-  color: rgba(0, 0, 0, 0.45);
-  width: 100%;
-  text-align: center;
-}
 .c-main {
   /* margin: 8px; */
-  padding: 12px;
-  background: #fff;
-  min-height: 500px;
+  /* padding: 12px; */
+  /* background: #fff; */
+  min-height: 450px;
 }
 .fade-leave-active,
 .fade-enter-active {
@@ -47,5 +33,13 @@
 .fade-enter,
 .fade-leave-to {
   opacity: 0;
+}
+::-webkit-scrollbar {
+  width: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #bfbfbf;
+  border-radius: 0px;
 }
 </style>

@@ -20,11 +20,13 @@ export default {
     let currConditionStr = ''
     let wait = false
     const handleValue = (key: string, val: string) => {
+      //根据key找到配置
+      const conditionCfg = conditions.find((row) => row.key == key)
       const existIndex = items.findIndex((row) => row.key == key)
-      if (val) {
+      if (val && conditionCfg) {
         const item: ConditionItem = {
           key: key,
-          action: 'eq',
+          action: conditionCfg.compare || 'eq',
           value: val,
         }
         if (existIndex >= 0) {
@@ -95,6 +97,7 @@ export default {
               {
                 value: refVal,
                 title: row.title,
+                compare: row.compare,
                 editMode: editMode,
                 onReset() {
                   editMode.value = true
@@ -117,12 +120,17 @@ export default {
                     if (val) {
                       editMode.value = false
                     }
+                    if (val) {
+                      handleValue(row.key, val)
+                    }
                   },
                   onBlur(val: InputValue) {
                     if (val) {
                       editMode.value = false
                     }
-                    handleValue(row.key, val)
+                    if (val) {
+                      handleValue(row.key, val)
+                    }
                   },
                 }),
               ]
@@ -142,11 +150,11 @@ export default {
         ]
       )
     )
-    nodes.push(
-      createVNode(TButton, { theme: 'default', variant: 'text' }, () => [
-        createVNode(SearchIcon, { size: '20px' }),
-      ])
-    )
+    // nodes.push(
+    //   createVNode(TButton, { theme: 'default', variant: 'text' }, () => [
+    //     createVNode(SearchIcon, { size: '20px' }),
+    //   ])
+    // )
     return () => nodes
   },
 }

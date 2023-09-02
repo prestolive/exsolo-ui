@@ -36,6 +36,7 @@ const GlueDrawer = {
           size: props.width,
           cancelBtn: null,
           confirmBtn: null,
+          // showOverlay: false,
           onClose() {
             props.switcher.close()
           },

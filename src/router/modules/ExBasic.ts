@@ -31,7 +31,7 @@ export default [
         path: '/ex-basic/role-info/:roleId',
         name: 'role-info',
         component: () => import('@/pages/ex-basic/role/RoleInfo.vue'),
-        meta: { title: '角色详情' },
+        meta: { title: '角色详情', hidden: true },
       },
     ],
   },

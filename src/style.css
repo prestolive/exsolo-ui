@@ -1,7 +1,7 @@
 :root {
   font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
 
-  /* font-size: 16px; */
+  /* font-size: 13px; */
   font-weight: 400;
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
@@ -15,6 +15,7 @@
 body {
   /* --td-bg-color-container: #f9fafc;
   --td-bg-color-secondarycontainer: #fff; */
+  --td-text-color-secondary: rgba(0, 0, 0, 0.85);
 }
 
 * {
@@ -128,7 +129,7 @@ li {
 
 /* 框架部分 */
 .ex-cond-item {
-  font-size: 0.9em;
+  /* font-size: 0.9em; */
   line-height: 1.2em;
   display: flex;
   position: relative;
@@ -144,7 +145,37 @@ li {
   height: 32px;
 }
 .ex-cond-title {
-  padding-right: 8px;
+  padding-right: 5px;
+}
+.ex-cond-title.ne::after {
+  content: '≠';
+  color: #bbb;
+  /* font-size: 0.8em; */
+  padding-left: 5px;
+}
+.ex-cond-title.gt::after {
+  content: '>';
+  color: #bbb;
+  /* font-size: 0.8em; */
+  padding-left: 5px;
+}
+.ex-cond-title.lt::after {
+  content: '<';
+  color: #bbb;
+  /* font-size: 0.8em; */
+  padding-left: 5px;
+}
+.ex-cond-title.ge::after {
+  content: '>=';
+  color: #bbb;
+  /* font-size: 0.8em; */
+  padding-left: 5px;
+}
+.ex-cond-title.le::after {
+  content: '<=';
+  color: #bbb;
+  /* font-size: 0.8em; */
+  padding-left: 5px;
 }
 .ex-cond-value {
   font-weight: 600;
@@ -159,4 +190,22 @@ li {
 .ex-cond-close:hover {
   font-weight: 600;
   color: rgba(0, 0, 0, 0.45);
+}
+section {
+  /* margin-bottom: 8px; */
+}
+section::before {
+  content: attr(title);
+  display: inline-block;
+  position: relative;
+  top: 0px;
+  /* margin-bottom: 3px; */
+  font-size: 0.9em;
+  padding: 0px 6px;
+  background: #f2f2f2;
+  border-radius: 2px;
+  margin-top: 3px;
+  margin-bottom: 3px;
+  margin-right: 12px;
+  user-select: all;
 }

@@ -3,6 +3,10 @@ export interface PageObject<T> {
   values?: T[]
   pagination: Pagination
 }
+export interface RoleInfoVO {
+  rolePO?: RolePO
+  permissions?: RolePermissionPO[]
+}
 export interface RolePO {
   id?: string
   roleName?: string
@@ -11,29 +15,15 @@ export interface RolePO {
   moduleCount?: number
   permissionCount?: number
 }
-export interface RoleInfoVO {
-  rolePO?: RolePO
-  permissions?: RolePermissionPO[]
-}
 export interface RolePermissionPO {
   id?: string
   roleId?: string
   permission?: string
   operator?: string
 }
-export interface UserPO {
-  id?: string
-  loginCode?: string
-  userName?: string
-  email?: string
-  phone?: string
-  status?: string
-  activeTs?: string
-}
 export interface Condition {
   ASC?: string
   DESC?: string
-  compares?: ICompareBean[]
   existFilters?: ConditionFilter[]
   unExistFilters?: ConditionFilter[]
   orders?: OrderBaseBean[]
@@ -54,6 +44,15 @@ export interface Pagination {
   current?: number
   pageSize?: number
 }
+export interface UserPO {
+  id?: string
+  loginCode?: string
+  userName?: string
+  email?: string
+  phone?: string
+  status?: string
+  activeTs?: string
+}
 export interface PermissionVO {
   module?: string
   node?: string
@@ -64,24 +63,25 @@ export interface PermissionVO {
 }
 
 interface POST {
-  'api/ex-basic/role/add': {
-    req: {
-      role?: RolePO
-    }
-    resp: null
-  }
-  'api/ex-basic/role/permission-set': {
-    req: {
-      roleId?: string
-      permissions?: string[]
-    }
-    resp: null
-  }
   'api/ex-basic/role/info': {
     req: {
       roleId?: string
     }
     resp: RoleInfoVO
+  }
+  'api/ex-basic/role/page': {
+    req: {
+      cond?: Condition
+      pagination?: Pagination
+    }
+    resp: PageObject<RolePO>
+  }
+  'api/ex-basic/role/modify': {
+    req: {
+      roleId?: string
+      roleName?: string
+    }
+    resp: null
   }
   'api/ex-basic/role/user-page': {
     req: {
@@ -101,19 +101,51 @@ interface POST {
     }
     resp: null
   }
-  'api/ex-basic/role/modify': {
+  'api/ex-basic/role/add': {
     req: {
-      roleId?: string
-      roleName?: string
+      role?: RolePO
     }
     resp: null
   }
-  'api/ex-basic/role/page': {
+  'api/ex-basic/role/permission-set': {
     req: {
+      roleId?: string
+      permissions?: string[]
+    }
+    resp: null
+  }
+  'api/ex-basic/user/page': {
+    req: {
+      status?: string[]
       cond?: Condition
       pagination?: Pagination
     }
-    resp: PageObject<RolePO>
+    resp: PageObject<UserPO>
+  }
+  'api/ex-basic/user/locked': {
+    req: {
+      userId?: string
+    }
+    resp: null
+  }
+  'api/ex-basic/user/change-password': {
+    req: {
+      userId?: string
+      password?: string
+    }
+    resp: null
+  }
+  'api/ex-basic/user/deleted': {
+    req: {
+      userId?: string
+    }
+    resp: null
+  }
+  'api/ex-basic/user/recover': {
+    req: {
+      userId?: string
+    }
+    resp: null
   }
   'api/ex-basic/user/add': {
     req: {
@@ -133,39 +165,6 @@ interface POST {
       userId?: string
     }
     resp: UserPO
-  }
-  'api/ex-basic/user/deleted': {
-    req: {
-      userId?: string
-    }
-    resp: null
-  }
-  'api/ex-basic/user/locked': {
-    req: {
-      userId?: string
-    }
-    resp: null
-  }
-  'api/ex-basic/user/recover': {
-    req: {
-      userId?: string
-    }
-    resp: null
-  }
-  'api/ex-basic/user/change-password': {
-    req: {
-      userId?: string
-      password?: string
-    }
-    resp: null
-  }
-  'api/ex-basic/user/page': {
-    req: {
-      status?: string[]
-      cond?: Condition
-      pagination?: Pagination
-    }
-    resp: PageObject<UserPO>
   }
 }
 

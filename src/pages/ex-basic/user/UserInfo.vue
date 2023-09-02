@@ -16,30 +16,15 @@
         </t-button>
       </t-space>
       <h1>基本信息</h1>
-      <div class="item-block">
-        <h1>状态</h1>
-        <span>{{ vo?.status }}</span>
-      </div>
-      <div class="item-block">
-        <h1>登录名</h1>
-        <span>{{ vo?.loginCode }}</span>
-      </div>
-      <div class="item-block">
-        <h1>称呼</h1>
-        <span>{{ vo?.userName }}</span>
-      </div>
-      <div class="item-block">
-        <h1>创建时间</h1>
-        <span>{{ vo?.activeTs }}</span>
-      </div>
-      <div class="item-block">
-        <h1>邮箱</h1>
-        <span>{{ vo?.email }}</span>
-      </div>
-      <div class="item-block">
-        <h1>手机号码</h1>
-        <span>{{ vo?.phone }}</span>
-      </div>
+      <t-space direction="vertical" size="8px">
+        <section title="状态">{{ vo?.status }}</section>
+        <section title="登录名">{{ vo?.loginCode }}</section>
+        <section title="称呼">{{ vo?.userName }}</section>
+        <section title="创建时间">{{ vo?.activeTs }}</section>
+        <section title="邮箱">{{ vo?.email }}</section>
+        <section title="手机号码">{{ vo?.phone }}</section>
+      </t-space>
+
       <h1>权限信息</h1>
       <div>building....</div>
     </div>
@@ -69,6 +54,7 @@ const props = defineProps({
   },
 })
 
+const emit = defineEmits(['change', 'finish'])
 const routerTabsStroe = useRouterTabsStore()
 
 //
@@ -101,6 +87,7 @@ const handleModifyUser = () => {
       userId: userId.value,
       onChange: () => {
         handleLoadData(userId.value)
+        emit('change')
       },
     })
   )

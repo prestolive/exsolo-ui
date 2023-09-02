@@ -1,35 +1,44 @@
 <template>
-  <section class="c-main">
+  <div class="c-main">
     <ConsoleSider></ConsoleSider>
-    <section class="c-right">
-      <ConsoleHeader></ConsoleHeader>
+    <div class="c-right">
       <div id="c-router-tabs" class="c-router-tabs">
         <div
           v-for="(routerTab, index) in routerTabsList"
           :key="`${routerTab.path}_${index}`"
           :class="routerTab.isAlive ? 'c-router-tab active' : 'c-router-tab'"
-          @click="handleRouterTabActive(routerTab)"
+          @click="onRouterTabActive(routerTab)"
         >
           <div
             v-if="!(routerTab.path == '/' || routerTabsList.length == 1)"
             class="c-router-close"
-            @click.stop="handleRouterTabClose(index)"
+            @click.stop="onRouterTabClose(index)"
           >
-            x
+            ×
           </div>
           {{ routerTab.meta.title }}
         </div>
       </div>
-      <ConsoleContent></ConsoleContent>
-      <ConsoleFooter></ConsoleFooter>
-    </section>
-  </section>
+      <div class="c-content">
+        <router-view v-slot="{ route, Component }">
+          <transition name="fade" mode="out-in">
+            <!--key="route.path" 要放在component才对，放在keep-alive会导致缓存失效-->
+            <keep-alive>
+              <component
+                :is="Component"
+                :key="route.path + route.meta.key"
+                @close="onComponentClose"
+                @title="(title:string) => onTitleUpdate(route.path,title)"
+              />
+            </keep-alive>
+          </transition>
+        </router-view>
+      </div>
+    </div>
+  </div>
 </template>
 <script lang="ts" setup>
-import ConsoleHeader from './ConsoleHeader.vue'
-import ConsoleContent from './ConsoleContent.vue'
 import ConsoleSider from './ConsoleSider.vue'
-import ConsoleFooter from './ConsoleFooter.vue'
 import { watch, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useRouterTabsStore } from '@/console/store/routerTabs'
@@ -43,15 +52,33 @@ const { routerTabsList } = routerTabsStroe
 
 const router = useRouter()
 
-const handleRouterTabActive = (routerTab: RouterTabItem) => {
+const onRouterTabActive = (routerTab: RouterTabItem) => {
   routerTabsStroe.addRouterTab(routerTab)
-  router.push({ path: routerTab.path, query: routerTab.query })
+  router.push({
+    path: routerTab.path,
+    query: routerTab.query,
+  })
 }
 
-const handleRouterTabClose = (routeIdx: number) => {
-  window.console.log('close', routeIdx)
-  const back = routerTabsStroe.closeRouterTab(routeIdx)
-  router.replace({ path: back.path, query: back.query })
+const onRouterTabClose = (routeIdx: number) => {
+  const closed = routerTabsStroe.closeRouterTab(routeIdx)
+  // router.removeRoute(closed.name)
+  const suggest = routerTabsStroe.findSuggestBack('')
+  router.replace({ path: suggest.path, query: suggest.query })
+}
+
+const onComponentClose = () => {
+  const closed = routerTabsStroe.closeCurrRouterTab()
+  const suggest = routerTabsStroe.findSuggestBack('')
+  // router.removeRoute(closed.name)
+  router.push({
+    path: suggest.path,
+    query: suggest.query,
+  })
+}
+
+const onTitleUpdate = (path: string, title: string) => {
+  routerTabsStroe.updateTitle(path, title)
 }
 
 const handleAppendTab = () => {
@@ -61,8 +88,7 @@ const handleAppendTab = () => {
     meta: { title },
     name,
   } = route
-
-  routerTabsStroe.addRouterTab({
+  const instanceName = routerTabsStroe.addRouterTab({
     path,
     query,
     title: title as string,
@@ -70,7 +96,9 @@ const handleAppendTab = () => {
     isAlive: true,
     meta: route.meta,
   })
+  route.meta['key'] = instanceName
 }
+
 onMounted(() => {
   handleAppendTab()
 })
@@ -78,7 +106,6 @@ onMounted(() => {
 watch(
   () => route.path,
   () => {
-    window.console.log('handle', route.path)
     handleAppendTab()
     // document
     //   .querySelector(`.${prefix}-layout`)
@@ -102,7 +129,7 @@ watch(
   display: flex;
   background: #fff;
   /* font-size: 0.8em; */
-  padding: 6px 12px 3px 12px;
+  padding: 5px 12px 5px 12px;
   position: relative;
   /* position: sticky;
   top: 0px;
@@ -115,13 +142,14 @@ watch(
 .c-router-tab {
   /* background: #eee; */
   padding: 0px 16px;
-  min-width: 100px;
+  /* min-width: 100px; */
   text-align: center;
   cursor: pointer;
   position: relative;
   box-sizing: border-box;
   line-height: 28px;
   font-size: 0.8em;
+  height: 28px;
 }
 .c-router-tab:not(:first-child) {
   /* border-left: 1px solid #ccc; */
@@ -153,9 +181,30 @@ watch(
 
 .c-router-close {
   position: absolute;
-  right: 8px;
-  top: -1px;
+  right: 5px;
+  top: -7px;
   cursor: pointer;
   color: #bbb;
+  display: none;
+}
+.c-router-tab:hover .c-router-close {
+  display: block;
+}
+
+.fade-leave-active,
+.fade-enter-active {
+  transition: opacity 0.22s cubic-bezier(0.38, 0, 0.24, 1);
+}
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
+}
+::-webkit-scrollbar {
+  width: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #bfbfbf;
+  border-radius: 0px;
 }
 </style>

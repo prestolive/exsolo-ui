@@ -2,9 +2,7 @@
   <div>
     <div class="item-manage">
       <div class="item-table">
-        <div class="search-bar">
-          <PageTableConditionPanel @change="handleQueryPanelChange" />
-        </div>
+        <!-- <div class="search-bar"></div> -->
 
         <t-table
           hover
@@ -20,23 +18,23 @@
           <template #topContent>
             <div class="table-bar">
               <div class="table-action">
-                <t-button @click="handleAdd">
-                  <template #icon> <add-icon /></template>新增
-                </t-button>
+                <PageTableConditionPanel @change="handleQueryPanelChange" />
               </div>
               <div class="table-config">
-                <t-button theme="default" variant="text">
-                  <refresh-icon />
-                </t-button>
-                <t-button theme="default" variant="text">
-                  <download-icon />
-                </t-button>
-                <t-button theme="default" variant="text">
-                  <setting-icon />
-                </t-button>
-                <t-button theme="default" variant="text">
-                  <fullscreen-icon />
-                </t-button>
+                <t-space size="0">
+                  <t-button theme="default" variant="text">
+                    <refresh-icon />
+                  </t-button>
+                  <t-button theme="default" variant="text">
+                    <download-icon />
+                  </t-button>
+                  <t-button theme="default" variant="text">
+                    <setting-icon />
+                  </t-button>
+                  <t-button theme="default" variant="text">
+                    <fullscreen-icon />
+                  </t-button>
+                </t-space>
               </div>
             </div>
           </template>
@@ -64,6 +62,7 @@ import {
   Table as TTable,
   Button as TButton,
   Space as TSpace,
+  Input as TInput,
   PageInfo,
   BaseTableCol,
 } from 'tdesign-vue-next'
@@ -75,6 +74,7 @@ import {
   SettingIcon,
   AddIcon,
   DownloadIcon,
+  FilterIcon,
 } from 'tdesign-icons-vue-next'
 
 import {
@@ -85,18 +85,19 @@ import {
 } from '@/console/type'
 import PageTableConditionPanel from '@/console/components/render/PageTableConditionPanel'
 
-interface PageHooksLocal {
-  columns: BaseTableCol[]
-  pageObject: PageObject
-  conditions: Array<BaseConditionCol>
-  loading: boolean
-  loadData: (param: object, pagination: Pagination) => Promise<PageObject>
-  handleAdd: () => void
-  handleInfo: (id: string) => void
-  handlePageChange: (pageInfo: PageInfo) => void
-  handleConditionChange?: (params: object) => void
-  handleRefresh?: () => void
-}
+import { PageHooks as PageHooksLocal } from './hooks/PageTableHooks'
+// interface PageHooksLocal {
+//   columns: BaseTableCol[]
+//   pageObject: PageObject
+//   conditions: Array<BaseConditionCol>
+//   loading: boolean
+//   loadData: (param: object, pagination: Pagination) => Promise<PageObject>
+//   handleAdd: () => void
+//   handleInfo: (id: string) => void
+//   handlePageChange: (pageInfo: PageInfo) => void
+//   handleConditionChange?: (params: object) => void
+//   handleRefresh?: () => void
+// }
 
 const props = defineProps<PageHooksLocal>()
 
@@ -116,12 +117,12 @@ const handleQueryPanelChange = (items: Array<ConditionItem>) => {
   background: #fff;
   min-height: 600px;
 }
-.search-bar {
+/* .search-bar {
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
   margin-bottom: 18px;
-}
+} */
 .search-conds {
   display: flex;
   flex-direction: row;
@@ -131,15 +132,17 @@ const handleQueryPanelChange = (items: Array<ConditionItem>) => {
   flex-direction: row;
   justify-content: space-between;
   /* margin-bottom: 12px; */
-  background: #fafafa;
-  padding: 12px;
-  border-top: 1px solid #f0f0f0;
+  /* background: #fafafa; */
+  padding: 6px 6px;
+  /* border-top: 1px solid #f0f0f0;
   border-left: 1px solid #f0f0f0;
-  border-right: 1px solid #f0f0f0;
+  border-right: 1px solid #f0f0f0; */
 }
 .ex-table {
   /* margin-top: 12px; */
   /* width: calc(100vw - 280px); */
+  border: 1px solid #ccd4e0;
+  border-radius: 4px;
 }
 .item-manage {
   display: flex;
@@ -149,8 +152,8 @@ const handleQueryPanelChange = (items: Array<ConditionItem>) => {
   flex: 0 0 324px;
   padding: 12px;
 }
-.item-table {
-  padding-top: 12px;
+.item-table table {
+  /* padding-top: 12px; */
 }
 
 .item-table >>> .t-table thead tr {
@@ -168,5 +171,8 @@ const handleQueryPanelChange = (items: Array<ConditionItem>) => {
 }
 .item-table >>> .table-bar + .t-table th {
   border-top: none;
+}
+.table-action {
+  display: flex;
 }
 </style>

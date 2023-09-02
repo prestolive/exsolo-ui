@@ -1,8 +1,7 @@
 <template>
   <aside class="c-side">
-    <div></div>
-    <section class="c-side-main">
-      <div class="c-logo">Logo</div>
+    <div class="c-logo">Logo</div>
+    <div class="c-side-main">
       <ul class="c-menu">
         <ConsoleSiderMenuItem
           v-for="block in menu"
@@ -10,7 +9,7 @@
           :model="block"
         />
       </ul>
-    </section>
+    </div>
   </aside>
 </template>
 <script lang="ts" setup>
@@ -25,7 +24,7 @@ const menu = ref(getMenu())
   flex: 0 0 200px;
   position: relative;
   box-sizing: border-box;
-  border-right: 1px dashed #ccc;
+  border-right: 1px solid #ccc;
   background: #fafafa;
   /* background: #f2f2f2; */
 }
@@ -33,6 +32,8 @@ const menu = ref(getMenu())
 .c-side-main {
   width: 200px;
   position: fixed;
+  overflow: scroll;
+  height: 100vh;
 }
 
 .c-logo {
@@ -40,26 +41,21 @@ const menu = ref(getMenu())
   padding: 3px 6px;
   height: 48px;
   width: auto;
-  border-bottom: 1px dashed #ccc;
-  background: #fff;
+  /* border-bottom: 1px dashed #ccc; */
+  /* background: #fff; */
 }
 
 .c-menu {
-  padding: 12px 0;
   width: auto;
+  padding-bottom: 12px;
 }
 
-.c-side-main::after {
-  content: 'sider';
-  position: absolute;
-  top: 12px;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  pointer-events: none;
-  font-size: 0.8em;
-  color: rgba(0, 0, 0, 0.45);
-  width: 100%;
-  text-align: center;
+::-webkit-scrollbar {
+  width: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #bfbfbf;
+  border-radius: 0px;
 }
 </style>

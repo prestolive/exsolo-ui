@@ -2,11 +2,12 @@ import { h, toRef, ref, createVNode, inject, VNode } from 'vue'
 
 import { CloseIcon, CloseCircleFilledIcon } from 'tdesign-icons-vue-next'
 export default {
-  props: ['value', 'title', 'editMode'],
+  props: ['value', 'title', 'compare', 'editMode'],
   emits: ['reset'],
   setup(props, { slots, emit }) {
     const mode = toRef(props, 'editMode')
     const val = toRef(props, 'value')
+    //≠= > > >=  <=  lk lkl lkr
     return () => [
       h(
         'li',
@@ -14,7 +15,11 @@ export default {
         mode.value
           ? h('div', { class: 'ex-cond-item' }, [slots.default()])
           : h('div', { class: 'ex-cond-item desc' }, [
-              h('div', { class: 'ex-cond-title' }, props.title),
+              h(
+                'div',
+                { class: 'ex-cond-title ' + props.compare },
+                props.title
+              ),
               h('div', { class: 'ex-cond-value' }, val.value),
               h(
                 CloseCircleFilledIcon,
@@ -25,7 +30,7 @@ export default {
                     emit('reset')
                   },
                 },
-                'x'
+                { default: () => 'x' }
               ),
             ])
       ),

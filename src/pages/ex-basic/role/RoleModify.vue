@@ -83,7 +83,7 @@ const handleSubmit = (context: SubmitContext) => {
     // MessagePlugin.success('修改成功')
     post('api/ex-basic/role/modify', {
       roleId: vo.value.rolePO?.id,
-      roleName: formData.value.roleName,
+      roleName: formData.value?.roleName,
     }).then(() => {
       MessagePlugin.success('修改成功')
       handleReset()
