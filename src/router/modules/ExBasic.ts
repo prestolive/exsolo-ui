@@ -5,8 +5,8 @@ export default [
   {
     path: '/ex-basic',
     component: console,
-    name: 'ex-base-security',
-    meta: { title: '授权管理', icon: BaseBlock },
+    name: 'ex-basic',
+    meta: { title: '基础数据管理', icon: BaseBlock },
     redirect: '/ex-basic/user-manage',
     children: [
       {
@@ -26,12 +26,20 @@ export default [
         name: 'role-manage',
         component: () => import('@/pages/ex-basic/role/RoleManage.vue'),
         meta: { title: '角色管理' },
+        children: [
+          {
+            path: '/ex-basic/role-info/:roleId',
+            name: 'role-info',
+            component: () => import('@/pages/ex-basic/role/RoleInfo.vue'),
+            meta: { title: '角色详情', hidden: true },
+          },
+        ],
       },
       {
-        path: '/ex-basic/role-info/:roleId',
-        name: 'role-info',
-        component: () => import('@/pages/ex-basic/role/RoleInfo.vue'),
-        meta: { title: '角色详情', hidden: true },
+        path: '/ex-basic/org-manage',
+        name: 'org-manage',
+        component: () => import('@/pages/ex-basic/org/OrgManage.vue'),
+        meta: { title: '组织管理' },
       },
     ],
   },

@@ -1,47 +1,50 @@
 <template>
-  <div>
-    <div class="bar">
-      <div class="left-action">
-        <div class="title">用户管理</div>
-        <div class="divider"></div>
+  <div class="main">
+    <h1>用户管理</h1>
+    <page-table-normal v-bind="pageBind">
+      <template #tableBar>
         <t-button theme="primary" @click="handleAdd">
-          <template #icon> <add-icon /></template>新增用户
+          <template #icon> <add-icon /></template>创建用户
         </t-button>
-      </div>
-      <div class="right-action"></div>
-    </div>
-    <div class="main">
-      <page-table-normal v-bind="pageBind"></page-table-normal>
-    </div>
+      </template>
+      <template #action="{ row }">
+        <t-space>
+          <t-button
+            theme="default"
+            variant="base"
+            size="small"
+            @click="handleInfo(row.id)"
+          >
+            <template #icon> <t-icon name="search" /></template>
+          </t-button>
+        </t-space>
+      </template>
+    </page-table-normal>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { h, ref } from 'vue'
-
+import { createVNode, ref } from 'vue'
 import { post, UserPO } from '../API'
 
-import { Space as TSpace, Button as TButton } from 'tdesign-vue-next'
-import { AddIcon } from 'tdesign-icons-vue-next'
+import {
+  Space as TSpace,
+  Button as TButton,
+  Icon as TIcon,
+} from 'tdesign-vue-next'
 import UserFormAdd from './UserFormAdd.vue'
 import UserInfo from './UserInfo.vue'
 import PageTableNormal from '@/console/components/PageTableNormal.vue'
+
 import { BaseTableCol, Pagination, BaseConditionCol } from '@/console/type'
 import { useNormalPage } from '@/console/components/hooks/PageTableHooks'
 import Glue from '@/console/Glue'
-import { eq } from 'lodash'
 
 const columns: BaseTableCol[] = [
-  { colKey: 'loginCode', title: '登录名', width: 120 },
-  { colKey: 'userName', title: '称呼', width: 120, ellipsis: true },
-  { colKey: 'activeTs', title: '创建时间', width: 120, ellipsis: true },
-  { colKey: 'status', title: '状态', width: 120 },
-  {
-    colKey: 'action',
-    title: '操作',
-    fixed: 'right',
-    width: 120,
-  },
+  { colKey: 'loginCode', title: '登录名' },
+  { colKey: 'userName', title: '称呼', ellipsis: true },
+  { colKey: 'activeTs', title: '创建时间', ellipsis: true },
+  { colKey: '_status.label', title: '状态' },
 ]
 const conditions: BaseConditionCol[] = [
   {
@@ -76,24 +79,23 @@ const pageBind = useNormalPage<UserPO>({
       pagination: pagination,
     })
   },
-
-  handleInfo: (id: string) => {
-    Glue.drawer(
-      { title: '用户详情', width: '720px' },
-      h(UserInfo, {
-        userId: id,
-        onChange: () => {
-          pageBind.handleRefresh && pageBind.handleRefresh()
-        },
-      })
-    )
-    // router.push('/ex-basic/user-info/' + userId)
-  },
 })
+const handleInfo = (id: string) => {
+  Glue.drawer(
+    { title: '用户详情', width: '720px' },
+    createVNode(UserInfo, {
+      userId: id,
+      onChange: () => {
+        pageBind.handleRefresh && pageBind.handleRefresh()
+      },
+    })
+  )
+  // router.push('/ex-basic/user-info/' + userId)
+}
 const handleAdd = () => {
   Glue.drawer(
-    { title: '新增用户', width: '720px' },
-    h(UserFormAdd, {
+    { title: '创建用户', width: '720px' },
+    createVNode(UserFormAdd, {
       onChange: () => {
         pageBind.handleRefresh && pageBind.handleRefresh()
       },
@@ -103,31 +105,8 @@ const handleAdd = () => {
 </script>
 <style scoped>
 .main {
-  /* margin: 8px; */
-  /* padding: 12px 24px; */
-  /* background: #fff; */
+  max-width: 1024px;
   min-height: 600px;
-  padding: 8px;
-}
-.bar {
-  display: flex;
-  justify-content: space-between;
-  padding: 8px 12px;
-  background: #fff;
-  border-bottom: 1px solid #ccd4e0;
-}
-.left-action {
-  display: flex;
-}
-.divider {
-  margin: 2px 15px;
-  border: 1px solid #d7d9dc;
-  border-width: 0 0 0 1px;
-}
-.title {
-  color: #121315;
-  font-size: 18px;
-  font-weight: 600;
-  line-height: 32px;
+  padding: 24px;
 }
 </style>

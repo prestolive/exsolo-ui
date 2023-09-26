@@ -12,7 +12,6 @@ export interface PageHooks<T> {
   conditions: Array<BaseConditionCol>
   loading?: boolean
   loadData: (param: object, pagination: Pagination) => Promise<PageObject<T>>
-  handleInfo: (id: string) => void
   handlePageChange?: (pageInfo: PageInfo) => void
   handleConditionChange?: (params: object) => void
   handleRefresh?: () => void

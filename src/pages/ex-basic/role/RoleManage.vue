@@ -1,18 +1,31 @@
 <template>
-  <div>
-    <div class="bar">
-      <div class="left-action">
-        <div class="title">角色管理</div>
-        <div class="divider"></div>
-        <t-button theme="primary" @click="handleAdd">
-          <template #icon> <add-icon /></template>新增角色
-        </t-button>
-      </div>
-      <div class="right-action"></div>
-    </div>
-    <div class="main">
-      <page-table-normal v-bind="pageBind"></page-table-normal>
-    </div>
+  <div class="main">
+    <h1>角色管理</h1>
+    <page-table-normal v-bind="pageBind">
+      <template #tableBar>
+        <t-button theme="primary" @click="handleAdd"> 创建角色 </t-button>
+      </template>
+      <template #action="{ row }">
+        <t-space>
+          <t-button
+            theme="default"
+            variant="text"
+            size="small"
+            @click="onInfo(row.id)"
+          >
+            <template #icon> <t-icon name="search" /></template>
+          </t-button>
+          <t-button
+            theme="default"
+            variant="text"
+            size="small"
+            @click="onJump(row.id)"
+          >
+            <template #icon> <t-icon name="jump" /></template>
+          </t-button>
+        </t-space>
+      </template>
+    </page-table-normal>
   </div>
 </template>
 
@@ -20,7 +33,11 @@
 import { h, ref } from 'vue'
 
 import { post, UserPO } from '../API'
-import { Space as TSpace, Button as TButton } from 'tdesign-vue-next'
+import {
+  Space as TSpace,
+  Button as TButton,
+  Icon as TIcon,
+} from 'tdesign-vue-next'
 import { AddIcon } from 'tdesign-icons-vue-next'
 import RoleAdd from './RoleAdd.vue'
 import PageTableNormal from '@/console/components/PageTableNormal.vue'
@@ -34,15 +51,9 @@ const router = useRouter()
 
 const columns: BaseTableCol[] = [
   { colKey: 'roleName', title: '角色名称' },
-  { colKey: 'roleSchema', title: '角色类型', width: 150 },
-  { colKey: 'moduleCount', title: '关联模块数量', width: 150 },
-  { colKey: 'powerCount', title: '关联权限数量', width: 150 },
-  {
-    colKey: 'action',
-    title: '操作',
-    fixed: 'right',
-    width: 120,
-  },
+  { colKey: 'roleSchema', title: '角色类型' },
+  { colKey: 'moduleCount', title: '关联模块数量' },
+  { colKey: 'powerCount', title: '关联权限数量' },
 ]
 const conditions: BaseConditionCol[] = [
   {
@@ -61,24 +72,25 @@ const pageBind = useNormalPage<UserPO>({
       pagination: pagination,
     })
   },
-
-  handleInfo: (id: string) => {
-    // Glue.drawer(
-    //   { title: '角色详情', width: '75%' },
-    //   h(RoleInfo, {
-    //     roleId: id,
-    //     onChange: () => {
-    //       pageBind.handleRefresh && pageBind.handleRefresh()
-    //     },
-    //   })
-    // )
-    router.push('/ex-basic/role-info/' + id)
-  },
 })
+const onInfo = (id: string) => {
+  Glue.drawer(
+    { title: '角色详情', width: '75%' },
+    h(RoleInfo, {
+      roleId: id,
+      onChange: () => {
+        pageBind.handleRefresh && pageBind.handleRefresh()
+      },
+    })
+  )
+}
+const onJump = (id: string) => {
+  router.push('/ex-basic/role-info/' + id)
+}
 
 const handleAdd = () => {
   Glue.drawer(
-    { title: '新增角色', width: '720px' },
+    { title: '创建角色', width: '720px' },
     h(RoleAdd, {
       onChange: () => {
         pageBind.handleRefresh && pageBind.handleRefresh()
@@ -90,29 +102,8 @@ const handleAdd = () => {
 
 <style scoped>
 .main {
-  min-height: 600px;
   max-width: 1024px;
-  padding: 8px;
-}
-.bar {
-  display: flex;
-  justify-content: space-between;
-  padding: 8px 12px;
-  background: #fff;
-  border-bottom: 1px solid #ccd4e0;
-}
-.left-action {
-  display: flex;
-}
-.divider {
-  margin: 2px 15px;
-  border: 1px solid #d7d9dc;
-  border-width: 0 0 0 1px;
-}
-.title {
-  color: #121315;
-  font-size: 18px;
-  font-weight: 600;
-  line-height: 32px;
+  min-height: 600px;
+  padding: 24px;
 }
 </style>

@@ -105,19 +105,6 @@ const allowInput = computed(() => {
     return true
   }
 })
-watchEffect(() => {
-  if (multiple.value) {
-    selected.value = []
-    inputValue.value = ''
-  }
-})
-watch(keyword, () => {
-  if (inputMode.value) {
-    onFind()
-  } else {
-    inputMode.value = false
-  }
-})
 const options = ref<ExPickerOptionBO[]>([])
 const popupVisible = ref(false)
 const isOptionSelected = (op: ExPickerOptionBO) => {
@@ -205,6 +192,50 @@ const onFind = () => {
     popupVisible.value = options.value.length > 0
   })
 }
+
+const onModelValueChange = (values: string) => {
+  const ids = values.split(',')
+  const requireIds = ids.filter(
+    (id) => !selected.value.some((item) => item.value == id)
+  )
+  const arr = selected.value.filter(
+    (item) => ids.indexOf(item.value || '') >= 0
+  )
+  if (requireIds.length > 0) {
+    post('api/console/picker/get', {
+      code: code.value || '',
+      ids: requireIds,
+    }).then((data) => {
+      if (data) {
+        data.forEach((item) => arr.push(item))
+        selected.value = [...arr]
+      }
+    })
+  }
+}
+
+watchEffect(() => {
+  if (multiple.value) {
+    selected.value = []
+    inputValue.value = ''
+  }
+})
+
+watch(keyword, () => {
+  if (inputMode.value) {
+    onFind()
+  } else {
+    inputMode.value = false
+  }
+})
+watch(
+  () => props.modelValue,
+  () => {
+    onModelValueChange(props.modelValue)
+    //todo 更新 selected
+  },
+  { immediate: true }
+)
 // onMounted(() => {
 //   onFind(null)
 // })

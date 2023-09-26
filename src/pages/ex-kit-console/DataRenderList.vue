@@ -1,7 +1,7 @@
 <template>
   <div class="main">
     <div class="toolbar">
-      <t-space><t-button>新增</t-button></t-space>
+      <t-space><t-button>创建</t-button></t-space>
       <t-input
         v-model="searchValue"
         placeholder="请输入你需要搜索的内容"

@@ -107,7 +107,7 @@ const getActiveStyle = (item) => {
 .c-menu-sub li {
   padding-left: 34px;
   line-height: 36px;
-  font-size: 0.9em;
+  font-size: 1em;
   letter-spacing: 1px;
 }
 

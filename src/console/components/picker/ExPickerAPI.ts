@@ -41,9 +41,9 @@ interface POST {
   'api/console/picker/get': {
     req: {
       code?: string
-      id?: string
+      ids?: string[]
     }
-    resp: ExPickerOptionBO
+    resp: ExPickerOptionBO[]
   }
   'api/console/picker/find': {
     req: {

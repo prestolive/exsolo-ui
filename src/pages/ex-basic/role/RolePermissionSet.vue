@@ -17,7 +17,7 @@
         <template #icon> <rollback-icon /></template>取消
       </t-button>
     </t-space>
-    <table border="1" style="border-collapse: collapse" class="module-table">
+    <table border="0" style="border-collapse: collapse" class="module-table">
       <tr>
         <th style="text-align: left" width="48px;">模块</th>
         <th style="text-align: left">节点</th>
@@ -200,7 +200,7 @@ const handleViewMode = () => {
   if (roleId.value) {
     handleLoadData(roleId.value).then(() => {
       editMode.value = false
-      settingViewAll.value = false
+      // settingViewAll.value = false
     })
   }
 }
@@ -290,11 +290,17 @@ watchEffect(() => {
 <style scoped>
 .module-table {
   border-color: #ccd4e0;
+
+  border-top: 1px solid #ccd4e0;
+  border-left: 1px solid #ccd4e0;
+  border-right: 1px solid #ccd4e0;
 }
 .module-table td,
 .module-table th {
   padding: 3px 6px;
   text-align: left;
+  /* border-right: 1px solid #ccd4e0; */
+  border-bottom: 1px solid #ccd4e0;
 }
 .module-table input[type='checkbox'] {
   vertical-align: bottom;

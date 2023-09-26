@@ -15,7 +15,8 @@
     "lodash": "^4.17.21",
     "pinia": "^2.0.30",
     "qs": "^6.10.5",
-    "tdesign-vue-next": "^1.0.6",
+    "tdesign-icons-vue-next": "^0.2.2",
+    "tdesign-vue-next": "^1.5.3",
     "vue": "^3.3.4",
     "vue-router": "~4.1.5"
   },

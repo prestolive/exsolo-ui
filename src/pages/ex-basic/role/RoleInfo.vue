@@ -1,32 +1,41 @@
 <template>
-  <div>
-    <div class="info">
-      <div class="header">
-        <div class="role-name">
-          <h1>{{ vo?.rolePO?.roleName }}</h1>
-          <div style="color: orange; padding-left: 11px">
-            {{ vo?.rolePO?.roleSchema }}
-          </div>
-        </div>
-        <t-space class="operate">
-          <t-button theme="default" @click="handleModify">修改</t-button>
-          <t-button theme="default" variant="text" @click="handleDelete">
-            <template #icon> <delete-icon /></template>删除
-          </t-button>
-        </t-space>
-      </div>
-      <t-tabs :default-value="1" class="role-content">
-        <t-tab-panel :value="1" label="权限清单">
-          <RolePermissionSet :role-id="roleId" />
-        </t-tab-panel>
-        <t-tab-panel :value="2" label="已分配用户">
-          <RoleUserSet :role-id="roleId" />
-        </t-tab-panel>
-        <t-tab-panel :value="3" label="已分配组织">
-          <p style="margin: 20px">选项卡2内容区</p>
-        </t-tab-panel>
-      </t-tabs>
+  <div class="main">
+    <div class="header">
+      <t-card :title="vo?.rolePO?.roleName" hover-shadow>
+        <template #actions>
+          <t-space>
+            <t-button theme="default" size="small" @click="handleModify">
+              <template #icon> <t-icon name="edit" /></template>修改
+            </t-button>
+            <t-button
+              theme="default"
+              variant="text"
+              size="small"
+              @click="onDelete"
+            >
+              <template #icon> <delete-icon /></template>删除
+            </t-button>
+          </t-space>
+        </template>
+        <template #content>
+          <section title="名称">{{ vo?.rolePO?.roleName }}</section>
+          <section title="类型">{{ vo?.rolePO?.roleSchema }}</section>
+          <section title="最后修改时间">{{ vo?.rolePO?.ts }}</section>
+          <section title="创建人">{{ vo?.rolePO?.operator }}</section>
+        </template>
+      </t-card>
     </div>
+    <t-tabs :default-value="1" class="role-content" size="medium">
+      <t-tab-panel :value="1" label="权限清单">
+        <RolePermissionSet :role-id="roleId" />
+      </t-tab-panel>
+      <t-tab-panel :value="2" label="已分配用户">
+        <RoleUserSet :role-id="roleId" />
+      </t-tab-panel>
+      <t-tab-panel :value="3" label="已分配组织">
+        <p style="margin: 20px">选项卡2内容区</p>
+      </t-tab-panel>
+    </t-tabs>
   </div>
 </template>
 
@@ -38,6 +47,9 @@ import {
   Tabs as TTabs,
   TabPanel as TTabPanel,
   Badge as TBadge,
+  Dropdown as TDropdown,
+  Card as TCard,
+  Icon as TIcon,
   MessagePlugin,
   DialogPlugin,
 } from 'tdesign-vue-next'
@@ -60,7 +72,6 @@ const props = defineProps({
 
 const emit = defineEmits(['change', 'finish', 'close', 'title'])
 
-//
 let roleId: Ref
 if (props.roleId) {
   roleId = ref(props.roleId)
@@ -95,7 +106,7 @@ const handleModify = () => {
     })
   )
 }
-const handleDelete = () => {
+const onDelete = () => {
   const confirmDialog = DialogPlugin.confirm({
     header: '删除确认',
     body: '确认删除？已分配给用户的权限将同时收回',
@@ -113,46 +124,14 @@ const handleDelete = () => {
 </script>
 
 <style scoped>
-.header {
-  padding: 8px 16px;
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  background: #f9fafc;
+.main {
+  max-width: 1024px;
+  padding: 24px;
 }
-.role-name {
-  display: flex;
-  justify-content: flex-start;
-  align-items: flex-end;
-}
-.info {
-  /* padding: 8px 16px; */
-}
-.info h1 {
-  font-size: 1.5em;
-  margin-block-start: 0em;
-  margin-block-end: 0em;
-}
-.item-block {
-  display: flex;
-  margin-bottom: 12px;
-  color: rgba(0, 0, 0, 0.95);
-}
-.item-block h1 {
-  width: 150px;
-  font-weight: normal;
-  text-align: left;
-  font-size: 1em;
-  margin-block-start: 0em;
-  margin-block-end: 0em;
-  color: rgba(0, 0, 0, 0.65);
-}
-.bread {
-  padding: 12px 12px 3px 12px;
-  color: rgba(0, 0, 0, 0.65);
-  font-size: 0.8em;
+.t-drawer__body .main {
+  padding: 0px !important;
 }
 .role-content {
-  padding: 12px;
+  margin-top: 12px;
 }
 </style>

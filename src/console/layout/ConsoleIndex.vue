@@ -1,7 +1,7 @@
 <template>
   <div class="c-main">
     <ConsoleSider></ConsoleSider>
-    <div class="c-right">
+    <div :class="route.meta.detailPage ? 'c-right detail-page' : 'c-right'">
       <div id="c-router-tabs" class="c-router-tabs">
         <div
           v-for="(routerTab, index) in routerTabsList"
@@ -20,6 +20,10 @@
         </div>
       </div>
       <div class="c-content">
+        <!-- <ConsoleBreadcrumb
+          v-if="route.meta.detailPage"
+          class="console-readcrumb"
+        ></ConsoleBreadcrumb> -->
         <router-view v-slot="{ route, Component }">
           <transition name="fade" mode="out-in">
             <!--key="route.path" 要放在component才对，放在keep-alive会导致缓存失效-->
@@ -43,6 +47,7 @@ import { watch, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useRouterTabsStore } from '@/console/store/routerTabs'
 import type { RouterTabItem } from '@/console/store/routerTabs.d'
+import ConsoleBreadcrumb from '@/console/components/ConsoleBreadcrumb.vue'
 
 const route = useRoute()
 
@@ -118,11 +123,21 @@ watch(
   display: flex;
   flex-direction: row;
 }
+.c-content {
+  /* padding: 24px; */
+  height: calc(100vh - 38px);
+  position: relative;
+  overflow-y: auto;
+}
 
 .c-right {
   flex: 1 1 auto;
   height: 100vh;
   overflow: hidden;
+  background: #fff;
+}
+.c-right.detail-page {
+  /* background: #f5f6f7; */
 }
 
 .c-router-tabs {
@@ -206,5 +221,12 @@ watch(
 ::-webkit-scrollbar-thumb {
   background-color: #bfbfbf;
   border-radius: 0px;
+}
+.console-readcrumb {
+  margin-left: 24px;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  opacity: 0.6;
 }
 </style>

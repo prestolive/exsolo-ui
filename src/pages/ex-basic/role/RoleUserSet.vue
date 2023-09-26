@@ -1,14 +1,26 @@
 <template>
-  <div class="main">
-    <div style="margin: 8px 0px">
+  <div>
+    <div style="padding: 12px 12px 12px 0px">
       <t-space>
         <t-button theme="primary" @click="onUserSet">
-          <template #icon> <UserAddIcon /></template>选择新增用户
+          <template #icon> <t-icon name="user-add" /></template>选择新增用户
         </t-button>
       </t-space>
     </div>
     <div>
-      <page-table-normal v-bind="pageBind"></page-table-normal>
+      <page-table-normal v-bind="pageBind">
+        <template #action="{ row }">
+          <t-space>
+            <t-button
+              theme="default"
+              variant="base"
+              size="small"
+              @click="onUserDelete(row.id)"
+            >
+              <template #icon> <t-icon name="delete" /></template>
+            </t-button> </t-space
+        ></template>
+      </page-table-normal>
     </div>
     <div>
       <t-dialog
@@ -20,7 +32,11 @@
       >
         <template #body>
           <section title="用户">
-            <ex-picker code="default_user_picker" :multiple="true"></ex-picker>
+            <ex-picker
+              v-model="userSetValues"
+              code="default_user_picker"
+              :multiple="true"
+            ></ex-picker>
           </section>
         </template>
       </t-dialog>
@@ -34,9 +50,10 @@ import {
   Space as TSpace,
   Button as TButton,
   Dialog as TDialog,
+  Icon as TIcon,
   TdButtonProps,
+  DialogPlugin,
 } from 'tdesign-vue-next'
-import { UserAddIcon } from 'tdesign-icons-vue-next'
 import { post, RoleInfoVO, UserPO } from '../API'
 
 import PageTableNormal from '@/console/components/PageTableNormal.vue'
@@ -94,12 +111,10 @@ const pageBind = useNormalPage<UserPO>({
       pagination: pagination,
     })
   },
-  handleInfo: (id: string) => {
-    alert('click:' + id)
-  },
 })
 
 const userSetDialogVisible = ref(false)
+const userSetValues = ref('')
 const userSetLoading = ref<TdButtonProps>({
   content: '保存',
   theme: 'primary',
@@ -112,12 +127,38 @@ const onUserSetDialogClose = () => {
   userSetDialogVisible.value = false
 }
 const onUserSetDialgConfirm = () => {
-  userSetLoading.value.loading = true
+  if (userSetValues.value) {
+    userSetLoading.value.loading = true
+    post('api/ex-basic/role/user-set', {
+      roleId: roleId.value,
+      userIds: userSetValues.value.split(','),
+    })
+      .then(() => {
+        userSetLoading.value.loading = false
+        userSetDialogVisible.value = false
+        userSetValues.value = ''
+        pageBind.handleRefresh && pageBind.handleRefresh()
+      })
+      .finally(() => {
+        userSetLoading.value.loading = false
+      })
+  }
+}
+const onUserDelete = (userId: string) => {
+  const confirmDialog = DialogPlugin.confirm({
+    header: '确认删除？',
+    // body: '确认删除？',
+    onConfirm: () => {
+      post('api/ex-basic/role/user-delete', {
+        roleId: roleId.value,
+        userId: userId,
+      }).then(() => {
+        pageBind.handleRefresh && pageBind.handleRefresh()
+      })
+      confirmDialog.destroy()
+    },
+  })
 }
 </script>
 
-<style scoped>
-.main {
-  padding: 8px;
-}
-</style>
+<style scoped></style>

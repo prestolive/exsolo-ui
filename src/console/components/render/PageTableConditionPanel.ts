@@ -139,17 +139,17 @@ export default {
         })
       )
     )
-    nodes.push(
-      createVNode(
-        TDropdown,
-        { options: options, maxColumnWidth: 120, maxHeight: 200 },
-        () => [
-          createVNode(TButton, { theme: 'default', variant: 'text' }, () => [
-            createVNode(FilterIcon, { size: '20px' }),
-          ]),
-        ]
-      )
-    )
+    // nodes.push(
+    //   createVNode(
+    //     TDropdown,
+    //     { options: options, maxColumnWidth: 120, maxHeight: 200 },
+    //     () => [
+    //       createVNode(TButton, { theme: 'default', variant: 'text' }, () => [
+    //         createVNode(FilterIcon, { size: '20px' }),
+    //       ]),
+    //     ]
+    //   )
+    // )
     // nodes.push(
     //   createVNode(TButton, { theme: 'default', variant: 'text' }, () => [
     //     createVNode(SearchIcon, { size: '20px' }),

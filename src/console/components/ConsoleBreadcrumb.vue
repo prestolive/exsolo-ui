@@ -1,8 +1,13 @@
 <template>
-  <t-breadcrumb :max-item-width="'150'" :options="nodes"></t-breadcrumb>
+  <div>
+    <span v-for="node in nodeOptions" :key="node.content" class="breadcrumb">{{
+      node.content
+    }}</span>
+  </div>
+  <!-- <t-breadcrumb :max-item-width="'150'" :options="nodeOptions"></t-breadcrumb> -->
 </template>
 <script lang="ts" setup>
-import { ref, watchEffect } from 'vue'
+import { ref, watchEffect, watch, onMounted } from 'vue'
 import {
   Breadcrumb as TBreadcrumb,
   BreadcrumbItem as TBreadcrumbItem,
@@ -12,7 +17,6 @@ import { useRoute } from 'vue-router'
 import { useRouterTabsStore } from '@/console/store/routerTabs'
 
 const route = useRoute()
-const currNodeName = route.name
 
 interface Node {
   content: string
@@ -38,7 +42,7 @@ const loopPath = (
     if (row.name == leafName) {
       nodes.push({
         content: row.meta?.title || '',
-        to: row.path,
+        // to: row.path,
       })
       return true
     } else {
@@ -47,7 +51,7 @@ const loopPath = (
         if (finded) {
           nodes.unshift({
             content: row.meta?.title || '',
-            to: row.path,
+            // to: row.path,
           })
           return true
         }
@@ -56,14 +60,41 @@ const loopPath = (
   }
   return false
 }
-let nodes: Node[] = []
-const finded = loopPath(currNodeName, nodes, route.matched)
-if (finded) {
-  nodes[nodes.length - 1].to = route.fullPath
-} else {
-  nodes = []
+const nodeOptions = ref<Node[]>([])
+
+const refence = () => {
+  let nodes: Node[] = []
+  const finded = loopPath(route.name, nodes, route.matched)
+  if (finded) {
+    nodes[nodes.length - 1].to = route.fullPath
+  } else {
+    nodes = []
+  }
+  nodeOptions.value = nodes
 }
 
-window.console.log(finded, nodes)
+watch(
+  () => route.fullPath,
+  () => {
+    refence()
+  }
+)
+
+onMounted(() => {
+  refence()
+})
 </script>
-<style scoped></style>
+<style scoped>
+.breadcrumb {
+  font-size: 0.8em;
+  color: rgba(0, 0, 0, 0.45);
+  padding-right: 3px;
+}
+.breadcrumb:not(:last-child)::after {
+  content: '/';
+  padding-left: 3px;
+}
+.breadcrumb:last-child {
+  color: #000;
+}
+</style>

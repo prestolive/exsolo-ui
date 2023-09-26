@@ -60,11 +60,40 @@ const defaultRouterList: Array<RouteRecordRaw> = [
   },
 ]
 
-export const allRoutes = [...defaultRouterList, ...asyncRouterList]
+// export const allRoutes = [...defaultRouterList, ...asyncRouterList]
+export const allRoutes = (): Array<RouteRecordRaw> => {
+  const all: RouteRecordRaw[] = [...defaultRouterList]
+  asyncRouterList.forEach((module) => {
+    const copyModule = { ...module }
+    copyModule.children?.forEach((node) => {
+      if (node.children) {
+        for (let i = node.children.length - 1; i >= 0; i--) {
+          const page = node.children[i]
+          // node.children.pop()
+          page.meta['detailPage'] = true
+          copyModule.children?.push(page)
+        }
+        node.children.forEach((page) => copyModule.children?.push(page))
+      }
+    })
+    all.push(copyModule)
+  })
+  return all
+}
+
+const loop = (all: RouteRecordRaw[], curr: RouteRecordRaw) => {
+  all.push({ ...curr, children: [] })
+  if (curr.children) {
+    curr.children.forEach((child) => {
+      loop(all, child)
+    })
+  }
+}
 
 export const getRoutesExpanded = (): string[] => {
   const expandedRoutes: string[] = []
-  allRoutes.forEach((item) => {
+  const all = allRoutes()
+  all.forEach((item) => {
     if (item.meta && item.meta.expanded) {
       expandedRoutes.push(item.path)
     }
@@ -93,7 +122,7 @@ export const getActive = (maxLevel = 3): string => {
 }
 const router = createRouter({
   history: createWebHistory(env === 'site' ? '/' : '/'),
-  routes: allRoutes,
+  routes: allRoutes(),
   scrollBehavior() {
     return {
       el: '#c-router-tabs',
