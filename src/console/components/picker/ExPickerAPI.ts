@@ -58,10 +58,10 @@ interface POST {
 
 export function post<URL extends keyof POST>(
   url: URL,
-  params?: POST[URL]['req']
+  data?: POST[URL]['req']
 ): Promise<POST[URL]['resp']> {
   return request.post<POST[URL]['resp']>({
     url,
-    params,
+    data,
   })
 }

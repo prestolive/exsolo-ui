@@ -290,17 +290,15 @@ watchEffect(() => {
 <style scoped>
 .module-table {
   border-color: #ccd4e0;
-
-  border-top: 1px solid #ccd4e0;
-  border-left: 1px solid #ccd4e0;
-  border-right: 1px solid #ccd4e0;
+  border-top: 1px solid var(--td-component-border);
+  border-left: 1px solid var(--td-component-border);
+  border-right: 1px solid var(--td-component-border);
 }
 .module-table td,
 .module-table th {
   padding: 3px 6px;
   text-align: left;
-  /* border-right: 1px solid #ccd4e0; */
-  border-bottom: 1px solid #ccd4e0;
+  border-bottom: 1px solid var(--td-component-border);
 }
 .module-table input[type='checkbox'] {
   vertical-align: bottom;
@@ -309,7 +307,7 @@ watchEffect(() => {
 }
 .permission {
   /* font-size: 11px; */
-  background: #f2f2f2;
+  background: var(--td-bg-color-secondarycontainer);
   padding: 0px 3px;
 }
 </style>

@@ -3,7 +3,6 @@
     ref="form"
     :rules="FORM_RULES"
     :data="formData"
-    :colon="true"
     @reset="handleReset"
     @submit="handleSubmit"
   >

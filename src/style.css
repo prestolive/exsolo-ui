@@ -5,17 +5,32 @@
   font-weight: 400;
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
+  --td-brand-color-1: #f2f3ff;
+  --td-brand-color-2: #d9e1ff;
+  --td-brand-color-3: #e22;
+  --td-brand-color-4: #e22;
+  --td-brand-color-5: #e22;
+  --td-brand-color-6: #e22;
+  --td-brand-color-7: #e22;
+  --td-brand-color-8: #e22;
+  --td-brand-color-9: #e22;
+  --td-brand-color-10: #e22;
 }
 body {
   /* --td-bg-color-container: #f9fafc;
   --td-bg-color-secondarycontainer: #fff; */
-  --td-text-color-secondary: rgba(0, 0, 0, 0.85);
+  /* --td-text-color-secondary: rgba(0, 0, 0, 0.85); */
+  --td-radius-medium: 3px;
+  /* --td-text-color-brand: yellow; */
+  /* --td-brand-color: #e22;
+  --td-brand-color-hover: #e22;
+  --td-brand-color-active: #e22; */
+  background: var(--td-bg-color-page);
 }
 
 * {
@@ -24,12 +39,12 @@ body {
 
 a {
   font-weight: 500;
-  color: #646cff;
+  /* color: #646cff; */
   text-decoration: inherit;
 }
 
 a:hover {
-  color: #535bf2;
+  /* color: #535bf2; */
 }
 
 body {
@@ -42,12 +57,19 @@ h1 {
   font-weight: 600;
   margin-block-start: 0px;
   margin-block-end: 12px;
+  color: var(--td-text-color-primary);
 }
 h2 {
   font-size: 20px;
   font-weight: 600;
   margin-block-start: 0px;
   margin-block-end: 0px;
+  color: var(--td-text-color-primary);
+}
+h3 {
+  margin-block-start: 0px;
+  font-weight: 500;
+  color: var(--td-text-color-secondary);
 }
 
 ul,
@@ -80,8 +102,7 @@ li {
   margin: 0 auto;
   padding: 0;
 }
-
-@media (prefers-color-scheme: light) {
+/* @media (prefers-color-scheme: light) {
   :root {
     color: #213547;
     background-color: #fff;
@@ -90,25 +111,7 @@ li {
   a:hover {
     color: #747bff;
   }
-}
-.x-loading-dialog {
-  height: 48px;
-  position: fixed;
-  top: 10%;
-  left: calc(50% - 80px);
-  z-index: 100;
-  background-color: #fff;
-  border-radius: 10px;
-  box-shadow: 2px 3px 9px 3px rgba(0, 0, 0, 0.15);
-}
-.x-dialog-content {
-  height: 48px;
-  padding: 3px 24px;
-  box-sizing: border-box;
-  display: flex;
-  justify-content: center;
-  line-height: 42px;
-}
+}  */
 @keyframes turn {
   0% {
     transform: rotate(0deg);
@@ -126,14 +129,6 @@ li {
     transform: rotate(360deg);
   }
 }
-.x-dialog-content svg {
-  line-height: 48px;
-  width: 24px;
-  height: 24px;
-  margin-left: 6px;
-  margin-top: 8px;
-  animation: turn 1s linear infinite;
-}
 
 /* 框架部分 */
 .ex-cond-item {
@@ -142,16 +137,18 @@ li {
   display: flex;
   position: relative;
   justify-content: flex-start;
-  color: #415bc9;
+  color: var(--td-text-color-brand);
   border-radius: 3px;
   margin-right: 8px;
   transition: padding-right 0.15s;
 }
 .ex-cond-item.desc {
-  background: #f2f3ff;
+  background: var(--td-bg-color-container-select);
   padding: 7px 32px 7px 12px;
   height: 32px;
-  box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.15);
+  color: var(--td-text-color-primary);
+  border: 1px solid var(--td-component-stroke);
+  box-shadow: var(--td-shadow-1);
 }
 .ex-cond-title {
   padding-right: 5px;
@@ -159,31 +156,26 @@ li {
 .ex-cond-title.ne::after {
   content: '≠';
   color: #bbb;
-  /* font-size: 0.8em; */
   padding-left: 5px;
 }
 .ex-cond-title.gt::after {
   content: '>';
   color: #bbb;
-  /* font-size: 0.8em; */
   padding-left: 5px;
 }
 .ex-cond-title.lt::after {
   content: '<';
   color: #bbb;
-  /* font-size: 0.8em; */
   padding-left: 5px;
 }
 .ex-cond-title.ge::after {
   content: '>=';
   color: #bbb;
-  /* font-size: 0.8em; */
   padding-left: 5px;
 }
 .ex-cond-title.le::after {
   content: '<=';
   color: #bbb;
-  /* font-size: 0.8em; */
   padding-left: 5px;
 }
 .ex-cond-value {
@@ -201,18 +193,18 @@ li {
   color: rgba(0, 0, 0, 0.45);
 }
 
-section {
-  /* margin-bottom: 8px; */
-}
 section::before {
   content: attr(title);
   display: inline-block;
+  min-width: 88px;
+  text-align: left;
   position: relative;
   top: 0px;
   /* margin-bottom: 3px; */
   font-size: 0.8em;
+  color: var(--td-text-color-secondary);
   padding: 0px 6px;
-  background: #f2f2f2;
+  /* background: #f2f2f2; */
   border-radius: 2px;
   margin-top: 3px;
   margin-bottom: 3px;

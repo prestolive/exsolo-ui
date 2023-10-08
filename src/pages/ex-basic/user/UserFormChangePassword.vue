@@ -4,7 +4,6 @@
       ref="form"
       :rules="FORM_RULES"
       :data="formData"
-      :colon="true"
       @submit="handleSubmit"
     >
       <t-form-item label="登录名">

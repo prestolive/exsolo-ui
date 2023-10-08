@@ -41,6 +41,12 @@ export default [
         component: () => import('@/pages/ex-basic/org/OrgManage.vue'),
         meta: { title: '组织管理' },
       },
+      {
+        path: '/ex-basic/setting',
+        name: 'setting',
+        component: () => import('@/pages/ex-basic/setting/SettingManage.vue'),
+        meta: { title: '系统设置' },
+      },
     ],
   },
 ]

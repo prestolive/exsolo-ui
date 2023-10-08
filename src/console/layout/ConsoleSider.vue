@@ -1,6 +1,10 @@
 <template>
   <aside class="c-side">
-    <div class="c-logo">Logo</div>
+    <div class="c-logo">
+      管理中台
+      <t-icon v-if="darkMode" name="mode-dark" @click="setLightMode" />
+      <t-icon v-if="!darkMode" name="mode-light" @click="setDarkMode" />
+    </div>
     <div class="c-side-main">
       <ul class="c-menu">
         <ConsoleSiderMenuItem
@@ -16,16 +20,28 @@
 import { getMenu } from '@/console/store/permission'
 import ConsoleSiderMenuItem from '@/console/components/ConsoleSiderMenuItem.vue'
 import { ref } from 'vue'
+import { Icon as TIcon } from 'tdesign-vue-next'
 
 const menu = ref(getMenu())
+const darkMode = ref(false)
+const setDarkMode = () => {
+  darkMode.value = true
+  document.documentElement.setAttribute('theme-mode', 'dark')
+}
+const setLightMode = () => {
+  darkMode.value = false
+  document.documentElement.removeAttribute('theme-mode')
+}
+setDarkMode()
 </script>
 <style scoped>
 .c-side {
   flex: 0 0 200px;
   position: relative;
   box-sizing: border-box;
-  border-right: 1px solid #ccc;
-  background: #fafafa;
+  border-right: 1px solid var(--td-component-border);
+  background: var(--td-bg-color-container);
+  color: var(--td-text-color-primary);
   /* background: #f2f2f2; */
 }
 
@@ -37,8 +53,8 @@ const menu = ref(getMenu())
 }
 
 .c-logo {
-  font-size: 24px;
-  padding: 3px 6px;
+  font-size: 1.6em;
+  padding: 8px 12px;
   height: 48px;
   width: auto;
   /* border-bottom: 1px dashed #ccc; */

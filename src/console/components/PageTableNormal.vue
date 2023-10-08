@@ -121,30 +121,31 @@ const handleQueryPanelChange = (items: Array<ConditionItem>) => {
   justify-content: space-between;
   /* margin-bottom: 12px; */
   /* background: #f5f6f7; */
-  background: #fff;
   margin-bottom: 12px;
   /* border-top: 1px solid #f0f0f0;
   border-left: 1px solid #f0f0f0;
   border-right: 1px solid #f0f0f0; */
 }
-.ex-table {
-}
-.ex-table >>> table {
-  border: 1px solid #e4e6eb;
-}
 .table-action {
   display: flex;
 }
 .ex-table >>> th {
-  background: #fafafa;
+  background: var(--td-bg-color-secondarycontainer);
 }
 .ex-table >>> th:not(:first-child)::after {
   content: '';
   display: block;
-  border-right: 1px solid #e4e6eb;
+  border-right: 1px solid var(--td-component-border);
   height: 14px;
   position: absolute;
   top: 12px;
   left: 0px;
+}
+.ex-table >>> .t-pagination {
+  color: var(--td-text-color-secondary);
+}
+.ex-table >>> .t-table__content {
+  border: 1px solid var(--td-component-border);
+  border-radius: 3px;
 }
 </style>

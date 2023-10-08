@@ -25,14 +25,14 @@ export default [
         path: '/ex-kit-console/item-manage',
         name: 'item manage',
         component: () => import('@/pages/ex-kit-console/ItemManage.vue'),
-        meta: { title: '对象管理' },
+        meta: { title: '枚举管理' },
       },
 
       {
         path: '/ex-kit-console/api-manage',
-        name: 'requestmapping manage',
+        name: 'rest manage',
         component: () => import('@/pages/ex-kit-console/ApiManage.vue'),
-        meta: { title: 'RequestMapping管理' },
+        meta: { title: 'REST管理' },
       },
       {
         path: '/ex-kit-console/ds-manage',

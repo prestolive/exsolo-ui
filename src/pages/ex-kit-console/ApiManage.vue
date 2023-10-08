@@ -1,6 +1,6 @@
 <template>
   <div class="main">
-    <div class="bread">构建工具 / RequestMapping管理</div>
+    <h1>RESP管理</h1>
     <div class="item-manage">
       <div class="item-tree">
         <t-input-adornment>
@@ -41,11 +41,20 @@
             >
           </t-space>
         </div>
-        <t-tree ref="descTree" :data="controllerDescTree" hover line expand-all>
+        <t-tree
+          ref="descTree"
+          :data="controllerDescTree"
+          hover
+          line
+          :expand-level="2"
+        >
           <template #label="{ node }">
             <div>
               <div v-if="!node.isLeaf()">
-                <span>{{ node.label }}</span>
+                <span
+                  :style="{ fontWeight: node.getLevel() == 0 ? '600' : '500' }"
+                  >{{ node.label }}</span
+                >
                 <span class="ts-type">[{{ node.data._value?.tsType }}]</span>
                 <span v-if="node.data?._value?.listType" class="is-array"
                   >Array</span
@@ -78,9 +87,8 @@ import {
 } from 'tdesign-vue-next'
 
 import { SearchIcon } from 'tdesign-icons-vue-next'
-import { post, download, ApiPreviewResp, ApiDocBO, ApiDocTypeBO } from './API'
+import { post, download, ApiDocClzBO, ApiDocBO, ApiDocTypeBO } from './API'
 import { anyTreeData, TreeNode } from '@/utils/exdash'
-import nodeTest from 'node:test'
 
 const items = ref<TreeNode[]>()
 const treeFilterText = ref('')
@@ -174,21 +182,19 @@ const handleDownoadModuleCode = () => {
   })
 }
 const initTags = () => {
-  post('api/ex-kit-console/api-previews', null).then(
-    (tags: ApiPreviewResp[]) => {
-      items.value = anyTreeData(
-        tags,
-        (value) => {
-          return {
-            label: value.clz,
-            value: value.clz,
-            _value: value,
-          }
-        },
-        (value) => value.module
-      )
-    }
-  )
+  post('api/ex-kit-console/api-previews', null).then((tags: ApiDocClzBO[]) => {
+    items.value = anyTreeData(
+      tags,
+      (value) => {
+        return {
+          label: value.clz,
+          value: value.clz,
+          _value: value,
+        }
+      },
+      (value) => value.module
+    )
+  })
 }
 onMounted(() => {
   initTags()
@@ -197,10 +203,8 @@ onMounted(() => {
 
 <style scoped>
 .main {
-  margin: 8px;
-  /* padding: 24px; */
-  background: #fff;
-  min-height: 600px;
+  height: calc(100vh - 54.8px);
+  padding: 24px;
 }
 .toolbar {
   display: flex;
@@ -213,21 +217,17 @@ onMounted(() => {
 }
 .item-tree {
   flex: 0 0 324px;
-  padding: 12px;
 }
 .item-table {
-  padding: 12px;
-}
-.bread {
-  padding: 12px 12px 3px 12px;
-  color: rgba(0, 0, 0, 0.65);
-  font-size: 0.8em;
+  margin-left: 12px;
+  padding-left: 12px;
+  border-left: 1px solid var(--td-component-border);
 }
 .ts-type {
-  color: rgba(0, 0, 0, 0.45);
+  color: var(--td-text-color-secondary);
   padding: 0px 3px;
 }
 .is-array {
-  color: green;
+  color: var(--td-warning-color-6);
 }
 </style>

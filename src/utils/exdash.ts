@@ -24,7 +24,7 @@ function treeLevelProcess<T>(
   if (obj == null) {
     obj = {
       label: node,
-      value: node,
+      value: deep,
       children: [],
     }
     result.push(obj)

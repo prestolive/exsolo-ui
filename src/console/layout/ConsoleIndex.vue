@@ -128,13 +128,14 @@ watch(
   height: calc(100vh - 38px);
   position: relative;
   overflow-y: auto;
+  background: var(--td-bg-color-container);
 }
 
 .c-right {
   flex: 1 1 auto;
   height: 100vh;
   overflow: hidden;
-  background: #fff;
+  /* background: #fff; */
 }
 .c-right.detail-page {
   /* background: #f5f6f7; */
@@ -142,20 +143,22 @@ watch(
 
 .c-router-tabs {
   display: flex;
-  background: #fff;
+  background: var(--td-bg-color-container);
   /* font-size: 0.8em; */
   padding: 5px 12px 5px 12px;
   position: relative;
+  color: var(--td-text-color-primary);
   /* position: sticky;
   top: 0px;
   left: 0px;
   z-index: 10; */
   z-index: 10;
-  border-bottom: 1px solid #ccc;
-  box-shadow: 0 2px 4px rgba(0, 21, 41, 0.08);
+  border-bottom: 1px solid var(--td-component-stroke);
+  /* box-shadow: 0 2px 4px rgba(0, 21, 41, 0.08); */
+  box-shadow: var(--td-shadow-1);
 }
 .c-router-tab {
-  /* background: #eee; */
+  background: var(--td-bg-color-container);
   padding: 0px 16px;
   /* min-width: 100px; */
   text-align: center;
@@ -170,7 +173,7 @@ watch(
   /* border-left: 1px solid #ccc; */
 }
 .c-router-tab.active {
-  background: #ddd;
+  background: var(--td-bg-color-container-active);
   /* border-radius: 8px; */
   /* box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.15); */
   /* border: 1px solid #ccc; */
@@ -183,7 +186,7 @@ watch(
   /* border-radius: 8px; */
 }
 .c-router-tab:hover {
-  background-color: #efefef;
+  background: var(--td-bg-color-container-hover);
   border-left: none;
   /* border-radius: 8px; */
 }

@@ -56,20 +56,20 @@ const getActiveStyle = (item) => {
 <style scoped>
 .c-menu-block {
   cursor: pointer;
-  color: rgba(0, 0, 0, 0.7);
+  color: var(--td-text-color-secondary);
   line-height: 36px;
   margin-left: 6px;
   padding-left: 28px;
   padding-right: 12px;
   position: relative;
-  font-size: 0.9em;
+  /* font-size: 0.9em; */
   letter-spacing: 1px;
   display: flex;
   justify-content: space-between;
 }
 
 .c-menu-block.open {
-  color: rgba(0, 0, 0, 0.9);
+  color: var(--td-text-color-primary);
 }
 
 .c-menu-block span {
@@ -112,24 +112,24 @@ const getActiveStyle = (item) => {
 }
 
 .c-menu-sub li.active {
-  background: rgb(242, 243, 255);
-  color: #0052d9;
+  background: var(--td-bg-color-container-active);
+  color: var(--td-text-color-brand);
   border-right: 1px solid #ccc;
 }
 
 .c-menu-sub li.active a {
   /* background: rgb(242, 243, 255); */
-  color: #0052d9;
+  color: var(--td-text-color-brand);
 }
 
 .c-menu-sub li:hover {
-  background: rgb(243, 243, 243);
+  background: var(--td-bg-color-container-hover);
   border-right: 1px solid #ccc;
 }
 
 li a {
   text-decoration: none;
-  color: rgba(0, 0, 0, 0.8);
+  color: var(--td-text-color-primary);
   display: block;
 }
 

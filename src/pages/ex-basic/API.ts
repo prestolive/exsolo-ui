@@ -21,14 +21,6 @@ export interface RolePermissionPO {
   permission?: string
   operator?: string
 }
-export interface PermissionVO {
-  module?: string
-  node?: string
-  action?: string
-  permission?: string
-  moduleNodeLabel?: string
-  actionLabel?: string
-}
 export interface UserPO {
   id?: string
   loginCode?: string
@@ -61,6 +53,68 @@ export interface Pagination {
   current?: number
   pageSize?: number
 }
+export interface PermissionVO {
+  module?: string
+  node?: string
+  action?: string
+  permission?: string
+  moduleNodeLabel?: string
+  actionLabel?: string
+}
+export interface ExSettingInstanceVO {
+  id?: string
+  moduleName?: string
+  groupName?: string
+  propName?: string
+  clzName?: string
+  fieldName?: string
+  propValue?: string
+  lastModifyBy?: string
+  lstModifyTs?: string
+  inputType?: string
+  pickerCode?: string
+  desc?: string
+  sortNo?: number
+  prefix?: string
+  suffix?: string
+  isProtect?: boolean
+  isRequire?: boolean
+  isRequireInInit?: boolean
+}
+export interface ExSettingProviderVO {
+  moduleName?: string
+  modulePackage?: string
+  moduleClz?: string
+}
+export interface OrgNodePO {
+  id?: string
+  schemaId?: string
+  orgName?: string
+  orgCode?: string
+  innerCode?: string
+  parentId?: string
+  status?: string
+  sortNo?: number
+  childCounts?: number
+  modifiedBy?: string
+}
+export interface OrgTreeNodeVO {
+  value?: string
+  label?: string
+  code?: string
+  innerCode?: string
+  parentId?: string
+  sortNo?: number
+  childCounts?: number
+  children?: OrgTreeNodeVO[]
+}
+export interface OrgSchemaPO {
+  id?: string
+  orgSchemaName?: string
+  orgSchemaCode?: string
+  defaultSchema?: boolean
+  orderNo?: number
+}
 export interface ExPickerOptionBO {
   value?: string
   label?: string
@@ -85,6 +139,34 @@ interface POST {
     }
     resp: RoleInfoVO
   }
+  'api/ex-basic/role/user-page': {
+    req: {
+      roleId?: string
+      cond?: Condition
+      pagination?: Pagination
+    }
+    resp: PageObject<UserPO>
+  }
+  'api/ex-basic/role/modify': {
+    req: {
+      roleId?: string
+      roleName?: string
+    }
+    resp: null
+  }
+  'api/ex-basic/role/delete': {
+    req: {
+      roleId?: string
+    }
+    resp: null
+  }
+  'api/ex-basic/role/permission-set': {
+    req: {
+      roleId?: string
+      permissions?: string[]
+    }
+    resp: null
+  }
   'api/ex-basic/role/permission-all': {
     req: null
     resp: PermissionVO[]
@@ -96,38 +178,10 @@ interface POST {
     }
     resp: null
   }
-  'api/ex-basic/role/permission-set': {
-    req: {
-      roleId?: string
-      permissions?: string[]
-    }
-    resp: null
-  }
   'api/ex-basic/role/user-delete': {
     req: {
       roleId?: string
       userId?: string
-    }
-    resp: null
-  }
-  'api/ex-basic/role/user-page': {
-    req: {
-      roleId?: string
-      cond?: Condition
-      pagination?: Pagination
-    }
-    resp: PageObject<UserPO>
-  }
-  'api/ex-basic/role/delete': {
-    req: {
-      roleId?: string
-    }
-    resp: null
-  }
-  'api/ex-basic/role/modify': {
-    req: {
-      roleId?: string
-      roleName?: string
     }
     resp: null
   }
@@ -164,7 +218,7 @@ interface POST {
     }
     resp: null
   }
-  'api/ex-basic/user/locked': {
+  'api/ex-basic/user/recover': {
     req: {
       userId?: string
     }
@@ -176,7 +230,7 @@ interface POST {
     }
     resp: null
   }
-  'api/ex-basic/user/recover': {
+  'api/ex-basic/user/locked': {
     req: {
       userId?: string
     }
@@ -189,6 +243,87 @@ interface POST {
       pagination?: Pagination
     }
     resp: PageObject<UserPO>
+  }
+  'api/ex-basic/setting/props': {
+    req: {
+      clzName?: string
+    }
+    resp: ExSettingInstanceVO[]
+  }
+  'api/ex-basic/setting/set': {
+    req: {
+      clzName?: string
+      fieldName?: string
+      propValue?: string
+    }
+    resp: null
+  }
+  'api/ex-basic/setting/modules': {
+    req: null
+    resp: ExSettingProviderVO[]
+  }
+  'api/ex-basic/org/create-node': {
+    req: {
+      orgNode?: OrgNodePO
+      parentId?: string
+    }
+    resp: null
+  }
+  'api/ex-basic/org/tree-node': {
+    req: {
+      schemaId?: string
+      parentId?: string
+    }
+    resp: OrgTreeNodeVO[]
+  }
+  'api/ex-basic/org/schemas': {
+    req: null
+    resp: OrgSchemaPO[]
+  }
+  'api/ex-basic/org/delete-schema': {
+    req: {
+      id?: string
+    }
+    resp: null
+  }
+  'api/ex-basic/org/create-schema': {
+    req: {
+      orgSchema?: OrgSchemaPO
+    }
+    resp: null
+  }
+  'api/ex-basic/org/modify-node': {
+    req: {
+      orgNode?: OrgNodePO
+    }
+    resp: null
+  }
+  'api/ex-basic/org/get': {
+    req: {
+      id?: string
+    }
+    resp: OrgNodePO
+  }
+  'api/ex-basic/org/delete-node': {
+    req: {
+      id?: string
+    }
+    resp: null
+  }
+  'api/ex-basic/org/modify-schema': {
+    req: {
+      orgSchema?: OrgSchemaPO
+    }
+    resp: null
+  }
+  'api/ex-basic/org/children-page': {
+    req: {
+      schemaId?: string
+      parentId?: string
+      cond?: Condition
+      pagination?: Pagination
+    }
+    resp: PageObject<OrgNodePO>
   }
   'api/console/picker/get': {
     req: {
@@ -210,10 +345,13 @@ interface POST {
 
 export function post<URL extends keyof POST>(
   url: URL,
-  params?: POST[URL]['req']
+  data?: POST[URL]['req']
 ): Promise<POST[URL]['resp']> {
   return request.post<POST[URL]['resp']>({
     url,
-    params,
+    data,
   })
+}
+export function download(url: string, data: object): Promise<null> {
+  return request.download({ url, data })
 }

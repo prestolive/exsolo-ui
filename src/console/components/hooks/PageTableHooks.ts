@@ -11,7 +11,10 @@ export interface PageHooks<T> {
   pageObject?: PageObject<T>
   conditions: Array<BaseConditionCol>
   loading?: boolean
-  loadData: (param: object, pagination: Pagination) => Promise<PageObject<T>>
+  loadData: (
+    param: object,
+    pagination: Pagination
+  ) => Promise<PageObject<T>> | undefined
   handlePageChange?: (pageInfo: PageInfo) => void
   handleConditionChange?: (params: object) => void
   handleRefresh?: () => void
@@ -33,11 +36,14 @@ export function useNormalPage<T>(props: PageHooks<T>) {
   const handleLoadData = (params: object) => {
     loading.value = true
     currParams = params
-    loadData(currParams, pageObject?.value?.pagination)
-      .then((data) => {
+    const p = loadData(currParams, pageObject?.value?.pagination)
+    if (p) {
+      p?.then((data) => {
         pageObject.value = data
-      })
-      .finally(() => [(loading.value = false)])
+      }).finally(() => [(loading.value = false)])
+    } else {
+      loading.value = false
+    }
   }
   if (props.handlePageChange == undefined) {
     props.handlePageChange = (pageInfo: PageInfo) => {

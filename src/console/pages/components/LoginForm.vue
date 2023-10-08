@@ -98,12 +98,9 @@ import {
   BrowseOffIcon,
   LogoAndroidIcon,
 } from 'tdesign-icons-vue-next'
-import {
-  post as AuthServerPost,
-  get as AuthServerGet,
-} from '@/console/AuthServerAPI'
+import { post as AuthServerPost } from '@/console/AuthServerAPI'
 
-import { TOKEN_NAME } from '@/config/global'
+import { ACCESS_TOKEN_NAME, REFRESH_TOKEN_NAME } from '@/config/global'
 
 const FORM_RULES = {
   loginCode: [{ required: true, message: '请填写账号' }],
@@ -130,8 +127,9 @@ const onSubmit = ({ validateResult, firstError }) => {
       .then((data) => {
         errorMessage.value = ''
         if (data.success) {
-          localStorage.setItem(TOKEN_NAME, data.token || '')
-          setAuthMeta(data.captchaRequire, data.captchaExpireTime)
+          localStorage.setItem(ACCESS_TOKEN_NAME, data.accessToken || '')
+          localStorage.setItem(REFRESH_TOKEN_NAME, data.refreshToken || '')
+          setAuthMeta(data.captchaRequire || false, data.captchaExpireTime || 0)
           //TOOD 跳转
           MessagePlugin.success({
             content: '登录成功',
@@ -152,7 +150,7 @@ const onSubmit = ({ validateResult, firstError }) => {
 }
 
 const updateCaptchaImage = () => {
-  AuthServerGet('api/auth/captcha').then((data) => {
+  AuthServerPost('api/auth/captcha').then((data) => {
     captchaTicket.value = data.ticket || ''
     captchaBase64Img.value = data.captchaBase64 || ''
     formData.value.captchaValue = ''

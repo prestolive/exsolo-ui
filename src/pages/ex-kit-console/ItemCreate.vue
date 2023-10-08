@@ -3,18 +3,14 @@
     ref="form"
     :rules="FORM_RULES"
     :data="formData"
-    :colon="true"
     @reset="handleReset"
     @submit="handleSubmit"
   >
-    <t-form-item label="角色名称" name="roleName">
-      <t-input v-model="formData.roleName" placeholder="角色名称"></t-input>
+    <t-form-item label="名称" name="name">
+      <t-input v-model="formData.name" placeholder="名称"></t-input>
     </t-form-item>
-    <t-form-item label="角色类型" name="roleSchema">
-      <t-select v-model="formData.roleSchema" placeholder="角色类型">
-        <t-option key="NORMAL" label="一般用户" value="NORMAL" />
-        <t-option key="ADMIN" label="系统管理" value="ADMIN" />
-      </t-select>
+    <t-form-item label="编码" name="code">
+      <t-input v-model="formData.code" placeholder="编码"></t-input>
     </t-form-item>
     <t-form-item>
       <t-space size="small">
@@ -33,20 +29,26 @@ import {
   Button as TButton,
   Space as TSpace,
   Input as TInput,
-  Select as TSelect,
-  Option as TOption,
   MessagePlugin,
   SubmitContext,
   FormInstanceFunctions,
 } from 'tdesign-vue-next'
-import { post, RolePO } from '../API'
+import { post, ItemPO } from './API'
 
 const emit = defineEmits(['finish', 'change'])
 
+const props = defineProps({
+  tag: {
+    type: String,
+    default: null,
+  },
+})
+
 const FORM_RULES = {
-  roleName: [{ required: true, message: '角色名称必填' }],
+  name: [{ required: true, message: '名称必填' }],
+  code: [{ required: true, message: '编码必填' }],
 }
-const formData = ref<RolePO>({})
+const formData = ref<ItemPO>({})
 const form = ref<FormInstanceFunctions>()
 
 const handleReset = () => {
@@ -56,9 +58,9 @@ const handleReset = () => {
 const handleSubmit = (context: SubmitContext) => {
   const { validateResult, firstError } = context
   if (validateResult === true) {
-    // MessagePlugin.success('提交成功')
-    post('api/ex-basic/role/add', {
-      role: formData.value,
+    post('api/ex-kit-console/create-item', {
+      item: formData.value,
+      tag: props.tag,
     }).then(() => {
       MessagePlugin.success('提交成功')
       handleReset()

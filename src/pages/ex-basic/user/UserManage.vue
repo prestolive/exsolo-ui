@@ -4,7 +4,7 @@
     <page-table-normal v-bind="pageBind">
       <template #tableBar>
         <t-button theme="primary" @click="handleAdd">
-          <template #icon> <add-icon /></template>创建用户
+          <template #icon> <t-icon name="add" /></template>创建用户
         </t-button>
       </template>
       <template #action="{ row }">
@@ -35,7 +35,6 @@ import {
 import UserFormAdd from './UserFormAdd.vue'
 import UserInfo from './UserInfo.vue'
 import PageTableNormal from '@/console/components/PageTableNormal.vue'
-
 import { BaseTableCol, Pagination, BaseConditionCol } from '@/console/type'
 import { useNormalPage } from '@/console/components/hooks/PageTableHooks'
 import Glue from '@/console/Glue'
@@ -77,6 +76,9 @@ const pageBind = useNormalPage<UserPO>({
     return post('api/ex-basic/user/page', {
       ...param,
       pagination: pagination,
+    }).then((data) => {
+      window.console.log('wuby', data)
+      return Promise.resolve(data)
     })
   },
 })

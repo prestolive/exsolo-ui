@@ -1,1 +1,2 @@
-export const TOKEN_NAME = 'exsolo-auth-token'
+export const ACCESS_TOKEN_NAME = 'exsolo-access-token'
+export const REFRESH_TOKEN_NAME = 'exsolo-refresh-token'

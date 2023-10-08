@@ -7,6 +7,7 @@
       placeholder="请选择或搜索"
       clearable
       multiple
+      :disabled="props.disabled"
       :popup-visible="popupVisible"
       @popup-visible-change="(val) => onPopupChange(val)"
       @clear="onClear"
@@ -18,7 +19,7 @@
         <chevron-down-icon />
       </template>
       <template #valueDisplay>
-        <div v-if="onlyFirstValue && !multiple">
+        <div v-if="onlyFirstValue && !multiple" class="single-content">
           {{ onlyFirstValue.label
           }}<span class="sub">{{ onlyFirstValue.sub }}</span>
         </div>
@@ -78,6 +79,14 @@ const props = defineProps({
   modelValue: {
     type: String,
     default: '',
+  },
+  value: {
+    type: String,
+    default: '',
+  },
+  disabled: {
+    type: Boolean,
+    defalut: false,
   },
 })
 //事件
@@ -194,6 +203,7 @@ const onFind = () => {
 }
 
 const onModelValueChange = (values: string) => {
+  window.console.log('#############', values)
   const ids = values.split(',')
   const requireIds = ids.filter(
     (id) => !selected.value.some((item) => item.value == id)
@@ -236,6 +246,14 @@ watch(
   },
   { immediate: true }
 )
+watch(
+  () => props.value,
+  () => {
+    onModelValueChange(props.value)
+    //todo 更新 selected
+  },
+  { immediate: true }
+)
 // onMounted(() => {
 //   onFind(null)
 // })
@@ -245,6 +263,7 @@ watch(
   display: flex;
   cursor: pointer;
   vertical-align: middle;
+  padding: 6px 6px;
 }
 .select-list li.yes:after {
   content: url('data:image/svg+xml;%20charset=utf8,%3Csvg%20t%3D%221691767885200%22%20class%3D%22icon%22%20viewBox%3D%220%200%201024%201024%22%20version%3D%221.1%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20p-id%3D%225661%22%20width%3D%2214%22%20height%3D%2214%22%3E%3Cpath%20d%3D%22M512%2065.984C266.08%2065.984%2065.984%20266.08%2065.984%20512c0%20245.952%20200.064%20446.016%20446.016%20446.016%20245.952%200%20446.016-200.064%20446.016-446.016C958.016%20266.08%20757.952%2065.984%20512%2065.984zM727.232%20438.432l-256.224%20259.008c-0.064%200.064-0.192%200.096-0.256%200.192-0.096%200.064-0.096%200.192-0.192%200.256-2.048%201.984-4.576%203.2-6.944%204.544-1.184%200.672-2.144%201.696-3.392%202.176-3.84%201.536-7.904%202.336-11.968%202.336-4.096%200-8.224-0.8-12.096-2.4-1.28-0.544-2.304-1.632-3.52-2.304-2.368-1.344-4.832-2.528-6.88-4.544-0.064-0.064-0.096-0.192-0.16-0.256-0.064-0.096-0.192-0.096-0.256-0.192l-126.016-129.504c-12.32-12.672-12.032-32.928%200.64-45.248%2012.672-12.288%2032.896-12.064%2045.248%200.64l103.264%20106.112%20233.28-235.84c12.416-12.576%2032.704-12.704%2045.248-0.256C739.52%20405.6%20739.648%20425.856%20727.232%20438.432z%22%20p-id%3D%225662%22%20fill%3D%22%23efb336%22%3E%3C%2Fpath%3E%3C%2Fsvg%3E');
@@ -254,11 +273,11 @@ watch(
   left: 6px;
 }
 .select-list li:hover {
-  background: #f2f2f2;
+  background: var(--td-bg-color-container-hover);
 }
 .sub {
   padding-left: 8px;
-  color: rgba(0, 0, 0, 0.45);
+  color: var(--td-text-color-secondary);
 }
 
 .close-btn {
@@ -292,5 +311,8 @@ watch(
 
 .ex-select-input >>> .t-input--focused {
   /* padding-right: 0px; */
+}
+.single-content {
+  line-height: 32px;
 }
 </style>

@@ -25,19 +25,19 @@ interface API_POST {
 }
 export function get<URL extends keyof API_GET>(
   url: URL,
-  params?: API_GET[URL]['req']
+  data?: API_GET[URL]['req']
 ): Promise<API_GET[URL]['resp']> {
   return request.get<API_GET[URL]['resp']>({
     url,
-    params,
+    data,
   })
 }
 export function post<URL extends keyof API_POST>(
   url: URL,
-  params?: API_POST[URL]['req']
+  data?: API_POST[URL]['req']
 ): Promise<API_POST[URL]['resp']> {
   return request.post<API_POST[URL]['resp']>({
     url,
-    params,
+    data,
   })
 }
