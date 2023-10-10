@@ -45,7 +45,7 @@ import {
 } from 'tdesign-vue-next'
 
 import { SearchIcon } from 'tdesign-icons-vue-next'
-import { PageObject } from '@/console/types/ui'
+import { PageObject } from '@/console/index.d'
 
 const columns = ref([
   { colKey: 'module', title: '模块', width: 180 },

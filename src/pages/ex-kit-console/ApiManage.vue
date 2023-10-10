@@ -16,11 +16,20 @@
           :data="items"
           hover
           line
-          expand-all
+          :expand-level="1"
           :filter="treeFilterFn"
           activable
           @active="onTreeActive"
-        ></t-tree>
+        >
+          <template #icon="{ node }">
+            <t-icon v-if="node.getChildren() && !node.expanded" name="folder" />
+            <t-icon
+              v-else-if="node.getChildren() && node.expanded"
+              name="folder-open-1"
+            />
+            <t-icon v-else name="control-platform" />
+          </template>
+        </t-tree>
       </div>
       <div class="item-table">
         <div class="toolbar">
@@ -84,9 +93,9 @@ import {
   TreeNodeValue,
   TreeNodeModel,
   MessagePlugin,
+  Icon as TIcon,
 } from 'tdesign-vue-next'
 
-import { SearchIcon } from 'tdesign-icons-vue-next'
 import { post, download, ApiDocClzBO, ApiDocBO, ApiDocTypeBO } from './API'
 import { anyTreeData, TreeNode } from '@/utils/exdash'
 

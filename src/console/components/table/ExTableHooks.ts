@@ -5,8 +5,8 @@ import {
   Pagination,
   BaseConditionCol,
   PageInfo,
-} from '@/console/type'
-export interface PageHooks<T> {
+} from '@/console/index.d'
+export interface ExTableHooks<T> {
   columns: Array<BaseTableCol>
   pageObject?: PageObject<T>
   conditions: Array<BaseConditionCol>
@@ -19,7 +19,7 @@ export interface PageHooks<T> {
   handleConditionChange?: (params: object) => void
   handleRefresh?: () => void
 }
-export function useNormalPage<T>(props: PageHooks<T>) {
+export function useExTable<T>(props: ExTableHooks<T>) {
   const { loadData } = props
 
   const pageObject = ref<PageObject<T>>({

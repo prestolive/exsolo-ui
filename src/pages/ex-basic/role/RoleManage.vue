@@ -1,7 +1,7 @@
 <template>
   <div class="main">
     <h1>角色管理</h1>
-    <page-table-normal v-bind="pageBind">
+    <ex-table v-bind="pageBind">
       <template #tableBar>
         <t-button theme="primary" @click="handleAdd"> 创建角色 </t-button>
       </template>
@@ -25,7 +25,7 @@
           </t-button>
         </t-space>
       </template>
-    </page-table-normal>
+    </ex-table>
   </div>
 </template>
 
@@ -38,12 +38,15 @@ import {
   Button as TButton,
   Icon as TIcon,
 } from 'tdesign-vue-next'
-import { AddIcon } from 'tdesign-icons-vue-next'
 import RoleAdd from './RoleAdd.vue'
-import PageTableNormal from '@/console/components/PageTableNormal.vue'
-import { BaseTableCol, Pagination, BaseConditionCol } from '@/console/type'
-import { useNormalPage } from '@/console/components/hooks/PageTableHooks'
-import Glue from '@/console/Glue'
+import {
+  BaseTableCol,
+  Pagination,
+  BaseConditionCol,
+  ExPlugin,
+  ExTable,
+  useExTable,
+} from '@/console/index.d'
 import { useRouter } from 'vue-router'
 import RoleInfo from './RoleInfo.vue'
 
@@ -63,7 +66,7 @@ const conditions: BaseConditionCol[] = [
   },
 ]
 
-const pageBind = useNormalPage<UserPO>({
+const pageBind = useExTable<UserPO>({
   columns: columns,
   conditions: conditions,
   loadData: (param: object, pagination: Pagination) => {
@@ -74,7 +77,7 @@ const pageBind = useNormalPage<UserPO>({
   },
 })
 const onInfo = (id: string) => {
-  Glue.drawer(
+  ExPlugin.drawer(
     { title: '角色详情', width: '75%' },
     h(RoleInfo, {
       roleId: id,
@@ -89,7 +92,7 @@ const onJump = (id: string) => {
 }
 
 const handleAdd = () => {
-  Glue.drawer(
+  ExPlugin.drawer(
     { title: '创建角色', width: '720px' },
     h(RoleAdd, {
       onChange: () => {

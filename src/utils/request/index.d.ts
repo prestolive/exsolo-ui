@@ -5,4 +5,12 @@ export interface ExSoleConfigWapper {
   tokenKey?: string
   authRetryInterceptors(err: AxiosError): Promise
   on401(err: AxiosError): void
+  onOtherErrors(err: AxiosError): void
+}
+
+export interface Result<T = any> {
+  code: number
+  data: T
+  errcode: string
+  errmsg: string
 }

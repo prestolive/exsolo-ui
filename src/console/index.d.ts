@@ -46,3 +46,6 @@ export interface ConditionItem {
   action: string
   value: string
 }
+export * from '@/console/plugin/ExPlugin'
+
+export * from '@/console/components/index.d'

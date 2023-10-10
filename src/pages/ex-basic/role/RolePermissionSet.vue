@@ -17,107 +17,114 @@
         <template #icon> <rollback-icon /></template>取消
       </t-button>
     </t-space>
-    <table border="0" style="border-collapse: collapse" class="module-table">
-      <tr>
-        <th style="text-align: left" width="48px;">模块</th>
-        <th style="text-align: left">节点</th>
-        <th>查看</th>
-        <th>编辑</th>
-        <th>配置</th>
-        <th>通用</th>
-        <th style="text-align: left">自定义</th>
-      </tr>
-      <tr v-if="!editMode && checkValues.length == 0">
-        <td style="text-align: center" colspan="7">未分配权限</td>
-      </tr>
-      <template v-for="moduleTable in viewDataFilter" :key="moduleTable.name">
-        <template
-          v-for="(nodeRow, index) in moduleTable.nodes"
-          :key="nodeRow.node"
-        >
+    <div>
+      <div class="module-table">
+        <table border="0" style="border-collapse: collapse; width: 100%">
           <tr>
-            <td v-if="index == 0" :rowspan="moduleTable.nodes.length">
-              {{ moduleTable.name }}
-            </td>
-            <td style="text-align: left">
-              {{ nodeRow.moduleNodeLabel }}
-            </td>
-            <td>
-              <label v-if="nodeRow.viewPermissinon">
-                <input
-                  v-model="checkValues"
-                  type="checkbox"
-                  :disabled="!editMode"
-                  :value="nodeRow.viewPermissinon?.permission"
-                />
-                <span v-if="settingViewPermission" class="permission">
-                  {{ nodeRow.viewPermissinon?.permission }}
-                </span>
-              </label>
-            </td>
-            <td>
-              <label v-if="nodeRow.editPermissinon">
-                <input
-                  v-model="checkValues"
-                  type="checkbox"
-                  :disabled="!editMode"
-                  :value="nodeRow.editPermissinon?.permission"
-                />
-                <span v-if="settingViewPermission" class="permission">
-                  {{ nodeRow.editPermissinon?.permission }}
-                </span>
-              </label>
-            </td>
-            <td>
-              <label v-if="nodeRow.configPermissinon">
-                <input
-                  v-model="checkValues"
-                  type="checkbox"
-                  :disabled="!editMode"
-                  :value="nodeRow.configPermissinon?.permission"
-                />
-                <span v-if="settingViewPermission" class="permission">
-                  {{ nodeRow.configPermissinon?.permission }}
-                </span>
-              </label>
-            </td>
-            <td>
-              <label v-if="nodeRow.commonPermissinon">
-                <input
-                  v-model="checkValues"
-                  type="checkbox"
-                  :disabled="!editMode"
-                  :value="nodeRow.commonPermissinon?.permission"
-                />
-
-                <span v-if="settingViewPermission" class="permission">
-                  {{ nodeRow.commonPermissinon?.permission }}
-                </span>
-              </label>
-            </td>
-            <td style="text-align: left">
-              <div class="display:flex;">
-                <label
-                  v-for="item in nodeRow.customPermissinon"
-                  :key="item.permission"
-                >
-                  <input
-                    v-model="checkValues"
-                    type="checkbox"
-                    :disabled="!editMode"
-                    :value="item.permission"
-                  />
-                  <span>{{ item.actionLabel }}</span>
-                  <span v-if="settingViewPermission" class="permission">
-                    {{ item.permission }}
-                  </span>
-                </label>
-              </div>
-            </td>
+            <th style="width= 48px">模块</th>
+            <th style="min-width: 220px">节点</th>
+            <th style="min-width: 64px">查看</th>
+            <th style="min-width: 64px">编辑</th>
+            <th style="min-width: 64px">配置</th>
+            <th>通用</th>
+            <th style="text-align: left">自定义</th>
           </tr>
-        </template>
-      </template>
-    </table>
+          <tr v-if="!editMode && checkValues.length == 0">
+            <td style="text-align: center" colspan="7">未分配权限</td>
+          </tr>
+          <template
+            v-for="moduleTable in viewDataFilter"
+            :key="moduleTable.name"
+          >
+            <template
+              v-for="(nodeRow, index) in moduleTable.nodes"
+              :key="nodeRow.node"
+            >
+              <tr>
+                <td v-if="index == 0" :rowspan="moduleTable.nodes.length">
+                  {{ moduleTable.name }}
+                </td>
+                <td style="text-align: left">
+                  {{ nodeRow.moduleNodeLabel }}
+                </td>
+                <td>
+                  <label v-if="nodeRow.viewPermissinon">
+                    <input
+                      v-model="checkValues"
+                      type="checkbox"
+                      :disabled="!editMode"
+                      :value="nodeRow.viewPermissinon?.permission"
+                    />
+                    <div v-if="settingViewPermission" class="permission">
+                      {{ nodeRow.viewPermissinon?.permission }}
+                    </div>
+                  </label>
+                </td>
+                <td>
+                  <label v-if="nodeRow.editPermissinon">
+                    <input
+                      v-model="checkValues"
+                      type="checkbox"
+                      :disabled="!editMode"
+                      :value="nodeRow.editPermissinon?.permission"
+                    />
+                    <div v-if="settingViewPermission" class="permission">
+                      {{ nodeRow.editPermissinon?.permission }}
+                    </div>
+                  </label>
+                </td>
+                <td>
+                  <label v-if="nodeRow.configPermissinon">
+                    <input
+                      v-model="checkValues"
+                      type="checkbox"
+                      :disabled="!editMode"
+                      :value="nodeRow.configPermissinon?.permission"
+                    />
+                    <div v-if="settingViewPermission" class="permission">
+                      {{ nodeRow.configPermissinon?.permission }}
+                    </div>
+                  </label>
+                </td>
+                <td>
+                  <label v-if="nodeRow.commonPermissinon">
+                    <input
+                      v-model="checkValues"
+                      type="checkbox"
+                      :disabled="!editMode"
+                      :value="nodeRow.commonPermissinon?.permission"
+                    />
+
+                    <div v-if="settingViewPermission" class="permission">
+                      {{ nodeRow.commonPermissinon?.permission }}
+                    </div>
+                  </label>
+                </td>
+                <td style="text-align: left">
+                  <div class="display:flex;">
+                    <label
+                      v-for="item in nodeRow.customPermissinon"
+                      :key="item.permission"
+                    >
+                      <input
+                        v-model="checkValues"
+                        type="checkbox"
+                        :disabled="!editMode"
+                        :value="item.permission"
+                      />
+                      <span>{{ item.actionLabel }}</span>
+                      <div v-if="settingViewPermission" class="permission">
+                        {{ item.permission }}
+                      </div>
+                    </label>
+                  </div>
+                </td>
+              </tr>
+            </template>
+          </template>
+        </table>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -293,12 +300,15 @@ watchEffect(() => {
   border-top: 1px solid var(--td-component-border);
   border-left: 1px solid var(--td-component-border);
   border-right: 1px solid var(--td-component-border);
+  line-height: var(--td-line-height-body-medium);
+  border-radius: var(--td-radius-medium);
+  display: inline-block;
 }
 .module-table td,
 .module-table th {
-  padding: 3px 6px;
   text-align: left;
   border-bottom: 1px solid var(--td-component-border);
+  padding: var(--td-comp-paddingTB-s) var(--td-comp-paddingLR-s);
 }
 .module-table input[type='checkbox'] {
   vertical-align: bottom;
@@ -306,8 +316,9 @@ watchEffect(() => {
   width: 16px;
 }
 .permission {
-  /* font-size: 11px; */
-  background: var(--td-bg-color-secondarycontainer);
-  padding: 0px 3px;
+  font-size: 11px;
+  /* background: var(--td-bg-color-secondarycontainer); */
+  color: var(--td-text-color-secondary);
+  padding-left: 3px;
 }
 </style>

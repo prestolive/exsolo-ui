@@ -98,7 +98,7 @@ import {
   BrowseOffIcon,
   LogoAndroidIcon,
 } from 'tdesign-icons-vue-next'
-import { post as AuthServerPost } from '@/console/AuthServerAPI'
+import { post as AuthServerPost } from '@/console/api/AuthServerAPI'
 
 import { ACCESS_TOKEN_NAME, REFRESH_TOKEN_NAME } from '@/config/global'
 
@@ -187,3 +187,4 @@ onMounted(() => {
   display: none;
 }
 </style>
+@/console/api/AuthServerAPI

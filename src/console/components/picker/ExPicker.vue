@@ -64,7 +64,7 @@ import {
 } from 'tdesign-vue-next'
 
 import { ChevronDownIcon } from 'tdesign-icons-vue-next'
-import { post, ExPickerOptionBO } from './ExPickerAPI'
+import { post, ExPickerOptionBO } from '@/console/api/PubDataAPI'
 import debouncedRef from '../ts/DebouncedRef'
 
 const props = defineProps({
@@ -203,10 +203,9 @@ const onFind = () => {
 }
 
 const onModelValueChange = (values: string) => {
-  window.console.log('#############', values)
   const ids = values.split(',')
   const requireIds = ids.filter(
-    (id) => !selected.value.some((item) => item.value == id)
+    (id) => id && !selected.value.some((item) => item.value == id)
   )
   const arr = selected.value.filter(
     (item) => ids.indexOf(item.value || '') >= 0
@@ -254,9 +253,6 @@ watch(
   },
   { immediate: true }
 )
-// onMounted(() => {
-//   onFind(null)
-// })
 </script>
 <style scoped>
 .select-list li {
@@ -304,13 +300,6 @@ watch(
   border-radius: var(--td-radius-default);
   border: 1px solid transparent;
   white-space: nowrap;
-}
-.ex-select-input >>> .t-input--prefix {
-  /* display: flex; */
-}
-
-.ex-select-input >>> .t-input--focused {
-  /* padding-right: 0px; */
 }
 .single-content {
   line-height: 32px;

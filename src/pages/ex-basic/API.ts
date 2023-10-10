@@ -61,6 +61,20 @@ export interface PermissionVO {
   moduleNodeLabel?: string
   actionLabel?: string
 }
+export interface ExPickerOptionBO {
+  value?: string
+  label?: string
+  sub?: string
+  echo1?: string
+  echo2?: string
+  echo3?: string
+  echo4?: string
+  echo5?: string
+}
+export interface CommItemVO {
+  label?: string
+  value?: string
+}
 export interface ExSettingInstanceVO {
   id?: string
   moduleName?: string
@@ -72,7 +86,7 @@ export interface ExSettingInstanceVO {
   lastModifyBy?: string
   lstModifyTs?: string
   inputType?: string
-  pickerCode?: string
+  dataRefCode?: string
   desc?: string
   sortNo?: number
   prefix?: string
@@ -88,7 +102,7 @@ export interface ExSettingProviderVO {
 }
 export interface OrgNodePO {
   id?: string
-  schemaId?: string
+  schemaCode?: string
   orgName?: string
   orgCode?: string
   innerCode?: string
@@ -115,16 +129,6 @@ export interface OrgSchemaPO {
   defaultSchema?: boolean
   orderNo?: number
 }
-export interface ExPickerOptionBO {
-  value?: string
-  label?: string
-  sub?: string
-  echo1?: string
-  echo2?: string
-  echo3?: string
-  echo4?: string
-  echo5?: string
-}
 
 interface POST {
   'api/ex-basic/role/add': {
@@ -147,6 +151,12 @@ interface POST {
     }
     resp: PageObject<UserPO>
   }
+  'api/ex-basic/role/delete': {
+    req: {
+      roleId?: string
+    }
+    resp: null
+  }
   'api/ex-basic/role/modify': {
     req: {
       roleId?: string
@@ -154,11 +164,9 @@ interface POST {
     }
     resp: null
   }
-  'api/ex-basic/role/delete': {
-    req: {
-      roleId?: string
-    }
-    resp: null
+  'api/ex-basic/role/permission-all': {
+    req: null
+    resp: PermissionVO[]
   }
   'api/ex-basic/role/permission-set': {
     req: {
@@ -166,10 +174,6 @@ interface POST {
       permissions?: string[]
     }
     resp: null
-  }
-  'api/ex-basic/role/permission-all': {
-    req: null
-    resp: PermissionVO[]
   }
   'api/ex-basic/role/user-set': {
     req: {
@@ -192,6 +196,28 @@ interface POST {
     }
     resp: PageObject<RolePO>
   }
+  'api/console/picker/get': {
+    req: {
+      code?: string
+      ids?: string[]
+    }
+    resp: ExPickerOptionBO[]
+  }
+  'api/console/picker/find': {
+    req: {
+      code?: string
+      keyword?: string
+      cond?: Condition
+      pagination?: Pagination
+    }
+    resp: PageObject<ExPickerOptionBO>
+  }
+  'api/console/select/list': {
+    req: {
+      tag?: string
+    }
+    resp: CommItemVO[]
+  }
   'api/ex-basic/user/add': {
     req: {
       userPO?: UserPO
@@ -211,14 +237,7 @@ interface POST {
     }
     resp: UserPO
   }
-  'api/ex-basic/user/change-password': {
-    req: {
-      userId?: string
-      password?: string
-    }
-    resp: null
-  }
-  'api/ex-basic/user/recover': {
+  'api/ex-basic/user/locked': {
     req: {
       userId?: string
     }
@@ -230,9 +249,16 @@ interface POST {
     }
     resp: null
   }
-  'api/ex-basic/user/locked': {
+  'api/ex-basic/user/recover': {
     req: {
       userId?: string
+    }
+    resp: null
+  }
+  'api/ex-basic/user/change-password': {
+    req: {
+      userId?: string
+      password?: string
     }
     resp: null
   }
@@ -271,14 +297,16 @@ interface POST {
   }
   'api/ex-basic/org/tree-node': {
     req: {
-      schemaId?: string
+      schemaCode?: string
       parentId?: string
     }
     resp: OrgTreeNodeVO[]
   }
-  'api/ex-basic/org/schemas': {
-    req: null
-    resp: OrgSchemaPO[]
+  'api/ex-basic/org/create-schema': {
+    req: {
+      orgSchema?: OrgSchemaPO
+    }
+    resp: null
   }
   'api/ex-basic/org/delete-schema': {
     req: {
@@ -286,7 +314,13 @@ interface POST {
     }
     resp: null
   }
-  'api/ex-basic/org/create-schema': {
+  'api/ex-basic/org/get': {
+    req: {
+      id?: string
+    }
+    resp: OrgNodePO
+  }
+  'api/ex-basic/org/modify-schema': {
     req: {
       orgSchema?: OrgSchemaPO
     }
@@ -298,51 +332,36 @@ interface POST {
     }
     resp: null
   }
-  'api/ex-basic/org/get': {
-    req: {
-      id?: string
-    }
-    resp: OrgNodePO
-  }
   'api/ex-basic/org/delete-node': {
     req: {
       id?: string
     }
     resp: null
   }
-  'api/ex-basic/org/modify-schema': {
-    req: {
-      orgSchema?: OrgSchemaPO
-    }
-    resp: null
+  'api/ex-basic/org/schemas': {
+    req: null
+    resp: OrgSchemaPO[]
   }
   'api/ex-basic/org/children-page': {
     req: {
-      schemaId?: string
+      schemaCode?: string
       parentId?: string
       cond?: Condition
       pagination?: Pagination
     }
     resp: PageObject<OrgNodePO>
   }
-  'api/console/picker/get': {
-    req: {
-      code?: string
-      ids?: string[]
-    }
-    resp: ExPickerOptionBO[]
-  }
-  'api/console/picker/find': {
-    req: {
-      code?: string
-      keyword?: string
-      cond?: Condition
-      pagination?: Pagination
-    }
-    resp: PageObject<ExPickerOptionBO>
-  }
 }
 
+export function get<URL extends keyof GET>(
+  url: URL,
+  data?: GET[URL]['req']
+): Promise<GET[URL]['resp']> {
+  return request.get<GET[URL]['resp']>({
+    url,
+    data,
+  })
+}
 export function post<URL extends keyof POST>(
   url: URL,
   data?: POST[URL]['req']

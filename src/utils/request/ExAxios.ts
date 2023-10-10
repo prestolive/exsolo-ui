@@ -5,13 +5,9 @@ import axios, {
   AxiosError,
 } from 'axios'
 
-import { ExSoleConfigWapper } from '.'
-import isString from 'lodash/isString'
-import isObject from 'lodash/isObject'
+import { ExSoleConfigWapper, Result } from './index.d'
 import cloneDeep from 'lodash/cloneDeep'
 import { ACCESS_TOKEN_NAME } from '@/config/global'
-import { Result } from '@/types/axios'
-import { RssIcon } from 'tdesign-icons-vue-next'
 
 // Axios模块
 export class ExAxios {
@@ -111,17 +107,13 @@ export class ExAxios {
         .request<any, AxiosResponse<Result>>(conf)
         .then((res: AxiosResponse<Result>) => {
           try {
-            window.console.log('then', res.status)
+            window.console.log('axios then', res.status)
             if (!res) {
               reject(new Error('返回空的res!'))
               return
             }
             if (res.status === 204) {
               resolve(res.data)
-            }
-            if (res.status == 401) {
-              this.configWapper.on401(res)
-              return
             }
             const { data, headers } = res
             if ('application/json' == headers['content-type']) {
@@ -145,26 +137,20 @@ export class ExAxios {
           // resolve(res as unknown as Promise<T>)
         })
         .catch((e: Error | AxiosError) => {
-          window.console.log('catch', e)
           if (axios.isAxiosError(e)) {
-            //401
+            window.console.log('axios catch', e.request.status)
             const status = e.request.status
+            //拦截器已经做了刷新token的处理，如果还能走到这里说明刷新token也失败了
             if (status === 401) {
-              //todo
-              // alert(status)
               reject(e)
               this.configWapper.on401(e)
-            } else if (status === 403) {
-              // alert(status)
+            } else {
               reject(e)
-            } else if (status === 500) {
-              // alert(status)
-              reject(e)
+              this.configWapper.onOtherErrors(e)
               return
             }
           } else {
-            //TODO 直接放出消息，但是不做任何处理
-            // alert(e.cause)
+            window.console.log('axios other error', e)
             reject(e)
           }
         })

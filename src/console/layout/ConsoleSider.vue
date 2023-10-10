@@ -18,7 +18,7 @@
 </template>
 <script lang="ts" setup>
 import { getMenu } from '@/console/store/permission'
-import ConsoleSiderMenuItem from '@/console/components/ConsoleSiderMenuItem.vue'
+import ConsoleSiderMenuItem from './components/ConsoleSiderMenuItem.vue'
 import { ref } from 'vue'
 import { Icon as TIcon } from 'tdesign-vue-next'
 
@@ -40,7 +40,7 @@ setDarkMode()
   position: relative;
   box-sizing: border-box;
   border-right: 1px solid var(--td-component-border);
-  background: var(--td-bg-color-container);
+  background: var(--td-bg-color-secondarycontainer);
   color: var(--td-text-color-primary);
   /* background: #f2f2f2; */
 }
@@ -71,7 +71,7 @@ setDarkMode()
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: #bfbfbf;
+  background-color: var(--td-component-border);
   border-radius: 0px;
 }
 </style>

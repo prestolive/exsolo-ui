@@ -1,6 +1,5 @@
 <template>
   <div class="ex-table-portal">
-    <!-- <div class="search-bar"></div> -->
     <t-table
       hover
       size="small"
@@ -15,18 +14,7 @@
       <template #topContent>
         <div class="table-bar">
           <div class="table-action">
-            <!-- <t-icon
-              name="system-search"
-              size="1.1em"
-              style="
-                color: rgba(0, 0, 0, 0.65);
-                position: relative;
-                top: 8px;
-                margin-left: 12px;
-                margin-right: 12px;
-              "
-            ></t-icon> -->
-            <PageTableConditionPanel @change="handleQueryPanelChange" />
+            <ExTableConditionPanel @change="handleQueryPanelChange" />
           </div>
           <div class="table-config">
             <t-space size="0">
@@ -63,20 +51,16 @@ import {
   Icon as TIcon,
 } from 'tdesign-vue-next'
 
-import {
-  PageObject,
-  BaseTableCol,
-  Pagination,
-  BaseConditionCol,
-  ConditionItem,
-} from '@/console/type'
-import PageTableConditionPanel from '@/console/components/render/PageTableConditionPanel'
+import { BaseTableCol, ConditionItem } from '@/console/index.d'
 
-import { PageHooks as PageHooksLocal } from './hooks/PageTableHooks'
+import ExTableConditionPanel from './ExTableConditionPanel'
 
-const props = defineProps<PageHooksLocal>()
+import { ExTableHooks } from './ExTableHooks'
+
+const props = defineProps<ExTableHooks>()
 
 const realColumns = ref<BaseTableCol[]>(props.columns)
+
 const slots = useSlots()
 if (slots['action']) {
   realColumns.value.push({
@@ -88,7 +72,7 @@ if (slots['action']) {
 
 provide('conditions', props.conditions)
 
-const pageHooks = reactive<PageHooksLocal>(props)
+const pageHooks = reactive<ExTableHooks>(props)
 
 const handleQueryPanelChange = (items: Array<ConditionItem>) => {
   pageHooks.handleConditionChange &&

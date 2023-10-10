@@ -7,7 +7,7 @@
   <!-- <t-breadcrumb :max-item-width="'150'" :options="nodeOptions"></t-breadcrumb> -->
 </template>
 <script lang="ts" setup>
-import { ref, watchEffect, watch, onMounted } from 'vue'
+import { ref, watch, onMounted } from 'vue'
 import {
   Breadcrumb as TBreadcrumb,
   BreadcrumbItem as TBreadcrumbItem,

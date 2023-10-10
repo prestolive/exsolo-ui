@@ -3,46 +3,22 @@
     <div class="org">
       <div class="center">
         <div class="title">
-          <h1>组织管理</h1>
+          <h1 @click="test">组织管理</h1>
         </div>
         <t-space style="margin: 6px 24px 12px 24px" size="0px">
-          <t-dropdown
-            v-if="schemaOptions.length > 0"
-            :options="schemaOptions"
-            @click="(node) => onSchemaActive(node.value + '')"
-          >
-            <t-button>
-              <template #suffix>
-                <t-icon name="chevron-down" size="16" />
-              </template>
-              {{ schemaOptions.find((row) => row.value == schemaId)?.content }}
-            </t-button>
-          </t-dropdown>
-
-          <t-button
-            v-if="schemaOptions.length == 0"
-            theme="default"
-            variant="text"
-            @click="onSchemaCreate"
-          >
-            <template #icon> <t-icon name="add" /></template>创建组织类型
-          </t-button>
-          <t-button
-            v-if="schemaOptions.length > 0"
-            theme="default"
-            variant="text"
-            @click="onSchemaCreate"
-          >
-            <template #icon> <t-icon name="add" /></template>
-          </t-button>
+          <ex-selector-dropdown
+            v-model="schemaCode"
+            tag="EX_ORG_SCHEMA"
+            @change="(value) => onSchemaActive(value)"
+          ></ex-selector-dropdown>
         </t-space>
-        <div v-if="schemaId" class="schemas">
+        <div v-if="schemaCode" class="schemas">
           <t-space>
             <t-button theme="default" size="small" @click="onNodeCreate('')">
               <template #icon> <t-icon name="add" /></template>创建根节点
             </t-button>
 
-            <t-button theme="default" size="small" @click="onNodeCreate('')">
+            <t-button theme="default" size="small" @click="onSorter">
               <template #icon> <t-icon name="arrow-up-down-1" /></template
               >调整顺序
             </t-button>
@@ -81,6 +57,17 @@
                 </t-dropdown>
               </t-space>
             </template>
+            <template #icon="{ node }">
+              <t-icon
+                v-if="node.getChildren() && !node.expanded"
+                name="folder"
+              />
+              <t-icon
+                v-else-if="node.getChildren() && node.expanded"
+                name="folder-open-1"
+              />
+              <t-icon v-else name="control-platform" />
+            </template>
           </t-tree>
         </div>
       </div>
@@ -112,7 +99,7 @@
           </template>
         </t-card>
         <h3>所有子节点</h3>
-        <page-table-normal v-bind="pageBind" />
+        <ex-table v-bind="pageBind" />
       </div>
     </div>
 
@@ -129,8 +116,7 @@
 </template>
 
 <script lang="ts" setup>
-import { h, ref, onMounted } from 'vue'
-
+import { h, ref } from 'vue'
 import {
   Space as TSpace,
   Button as TButton,
@@ -141,24 +127,25 @@ import {
   Card as TCard,
   TdButtonProps,
   DialogPlugin,
-  TreeNodeModel,
   DropdownOption,
 } from 'tdesign-vue-next'
-import OrgSchemaCreate from './OrgSchemaCreate.vue'
 import OrgNodeCreate from './OrgNodeCreate.vue'
 
-import PageTableNormal from '@/console/components/PageTableNormal.vue'
-import { BaseTableCol, Pagination, BaseConditionCol } from '@/console/type'
-import { useNormalPage } from '@/console/components/hooks/PageTableHooks'
-import Glue from '@/console/Glue'
-import { post, OrgSchemaPO, OrgNodePO } from '../API'
+import {
+  BaseTableCol,
+  Pagination,
+  BaseConditionCol,
+  ExPlugin,
+  ExSelectorDropdown,
+  ExTable,
+  useExTable,
+} from '@/console/index.d'
+import { post, OrgNodePO } from '../API'
 import { TreeNode } from '@/utils/exdash'
 
 const nodeMoreOptions = [{ content: '删除', value: 'delete' }]
 
-const schemaOptions = ref<DropdownOption[]>([])
-const schemas = ref<OrgSchemaPO[]>()
-const schemaId = ref('')
+const schemaCode = ref('')
 
 const expanded = ref([])
 
@@ -179,35 +166,15 @@ const onCreateNodeDialogConfirm = () => {
 
 const treeItems = ref<TreeNode[]>([])
 
-const onLoad = (afterCreate: boolean) => {
-  post('api/ex-basic/org/schemas').then((data) => {
-    schemas.value = data
-    schemaOptions.value = schemas.value.map((row) => {
-      return {
-        content: row.orgSchemaName,
-        value: row.id,
-      }
-    })
-    if (schemas.value.length > 0) {
-      if (afterCreate) {
-        onSchemaActive(schemas.value.slice(-1)[0].id || '')
-      } else {
-        onSchemaActive(schemas.value[0].id || '')
-      }
-    }
-  })
-}
-
-const onSchemaActive = (id: string) => {
-  schemaId.value = id
-  onLoadTree(id, undefined)
+const onSchemaActive = (code: string) => {
+  onLoadTree(code, undefined)
   pageBind.handleRefresh && pageBind.handleRefresh()
 }
 
-const onLoadTree = (id: string, parentId: string | undefined) => {
-  if (id) {
+const onLoadTree = (code: string, parentId: string | undefined) => {
+  if (code) {
     post('api/ex-basic/org/tree-node', {
-      schemaId: id,
+      schemaCode: code,
       parentId: parentId,
     }).then((data) => {
       treeItems.value = data
@@ -215,26 +182,14 @@ const onLoadTree = (id: string, parentId: string | undefined) => {
   }
 }
 
-const onSchemaCreate = () => {
-  Glue.drawer(
-    { title: '新增组织', width: '720px' },
-    h(OrgSchemaCreate, {
-      onChange: () => {
-        onLoad(true)
-      },
-    })
-  )
-}
-
 const onNodeCreate = (parentId: string | '') => {
-  window.console.log(parentId)
-  Glue.drawer(
+  ExPlugin.drawer(
     { title: '创建节点', width: '720px' },
     h(OrgNodeCreate, {
-      schemaId: schemaId.value,
+      schemaCode: schemaCode.value,
       parentId: parentId,
       onChange: () => {
-        onLoadTree(schemaId.value, undefined)
+        onLoadTree(schemaCode.value, undefined)
         expanded.value.push(parentId)
       },
     })
@@ -272,14 +227,14 @@ const conditions: BaseConditionCol[] = [
     compare: 'lk',
   },
 ]
-const pageBind = useNormalPage<OrgNodePO>({
+const pageBind = useExTable<OrgNodePO>({
   columns: columns,
   conditions: conditions,
   loadData: (param: object, pagination: Pagination) => {
-    if (schemaId.value) {
+    if (schemaCode.value) {
       return post('api/ex-basic/org/children-page', {
         ...param,
-        schemaId: schemaId.value,
+        schemaCode: schemaCode.value,
         parentId: activedNode.value.length > 0 ? activedNode.value[0] : '',
         pagination: pagination,
       })
@@ -295,7 +250,7 @@ const onNodeAction = (option: DropdownOption, nodeId: string) => {
         post('api/ex-basic/org/delete-node', {
           id: nodeId,
         }).then(() => {
-          onLoadTree(schemaId.value, undefined)
+          onLoadTree(schemaCode.value, undefined)
         })
         confirmDialog.destroy()
       },
@@ -303,9 +258,19 @@ const onNodeAction = (option: DropdownOption, nodeId: string) => {
   }
 }
 
-onMounted(() => {
-  onLoad(false)
-})
+const onSorter = () => {
+  ExPlugin.drawer(
+    { title: '创建节点', width: '720px' },
+    h(OrgNodeCreate, {
+      schemaCode: schemaCode.value,
+      parentId: '',
+      onChange: () => {
+        onLoadTree(schemaCode.value, undefined)
+        // expanded.value.push('')
+      },
+    })
+  )
+}
 </script>
 
 <style scoped>
@@ -359,3 +324,4 @@ onMounted(() => {
   background: var(--td-bg-color-container-active);
 }
 </style>
+@/console/plugin

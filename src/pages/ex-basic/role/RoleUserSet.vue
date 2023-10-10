@@ -8,7 +8,7 @@
       </t-space>
     </div>
     <div>
-      <page-table-normal v-bind="pageBind">
+      <ex-table v-bind="pageBind">
         <template #action="{ row }">
           <t-space>
             <t-button
@@ -20,7 +20,7 @@
               <template #icon> <t-icon name="delete" /></template>
             </t-button> </t-space
         ></template>
-      </page-table-normal>
+      </ex-table>
     </div>
     <div>
       <t-dialog
@@ -34,7 +34,7 @@
           <section title="用户">
             <ex-picker
               v-model="userSetValues"
-              code="default_user_picker"
+              code="DEFAULT_USER_PICKER"
               :multiple="true"
             ></ex-picker>
           </section>
@@ -54,13 +54,16 @@ import {
   TdButtonProps,
   DialogPlugin,
 } from 'tdesign-vue-next'
-import { post, RoleInfoVO, UserPO } from '../API'
+import { post, UserPO } from '../API'
 
-import PageTableNormal from '@/console/components/PageTableNormal.vue'
-import { BaseTableCol, Pagination, BaseConditionCol } from '@/console/type'
-import { useNormalPage } from '@/console/components/hooks/PageTableHooks'
+import {
+  BaseTableCol,
+  Pagination,
+  BaseConditionCol,
+  ExTable,
+  useExTable,
+} from '@/console/index.d'
 import ExPicker from '@/console/components/picker/ExPicker.vue'
-import Glue from '@/console/Glue'
 const emit = defineEmits(['change', 'finish'])
 
 const props = defineProps({
@@ -101,7 +104,7 @@ const conditions: BaseConditionCol[] = [
   },
 ]
 
-const pageBind = useNormalPage<UserPO>({
+const pageBind = useExTable<UserPO>({
   columns: columns,
   conditions: conditions,
   loadData: (param: object, pagination: Pagination) => {

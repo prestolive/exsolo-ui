@@ -12,7 +12,7 @@
           <ex-picker
             v-else-if="sp?.inputType == 'PICKER'"
             :value="sp?.propValue"
-            :code="sp?.pickerCode"
+            :code="sp?.dataRefCode"
             :disabled="true"
           ></ex-picker>
           <span v-else>{{ sp?.propValue }}</span>
@@ -38,8 +38,13 @@
           <ex-picker
             v-if="sp?.inputType == 'PICKER'"
             v-model="editValue"
-            :code="sp?.pickerCode"
+            :code="sp?.dataRefCode"
           ></ex-picker>
+          <ex-selector
+            v-if="sp?.inputType == 'SELECTOR'"
+            v-model="editValue"
+            :tag="sp?.dataRefCode"
+          ></ex-selector>
           <t-date-picker
             v-if="sp?.inputType == 'DATE'"
             v-model="editValue"
@@ -95,6 +100,7 @@
 import { ref, onMounted, watch } from 'vue'
 import { post, ExSettingInstanceVO } from '../API'
 import ExPicker from '@/console/components/picker/ExPicker.vue'
+import ExSelector from '@/console/components/selector/ExSelector.vue'
 import {
   Space as TSpace,
   Button as TButton,
@@ -164,6 +170,7 @@ const onBlur = () => {
   color: var(--td-text-color-secondary);
   min-width: 180px;
   margin: auto 0px;
+  padding-right: 12px;
 }
 .content {
   display: flex;
@@ -191,14 +198,17 @@ const onBlur = () => {
   padding: 12px 12px;
   position: relative;
 }
+.cell-panel:hover {
+  background: var(--td-bg-color-container-hover);
+}
 .cell-panel:hover:before {
   content: '';
   display: block;
   position: absolute;
   left: 0px;
-  top: 20px;
-  width: 3px;
-  height: 38px;
+  top: 0px;
+  width: 5px;
+  height: 100%;
   background: var(--td-bg-color-container-active);
 }
 </style>

@@ -1,6 +1,6 @@
-import { h, toRef, ref, createVNode, inject, VNode } from 'vue'
+import { h, toRef } from 'vue'
 
-import { CloseIcon, CloseCircleFilledIcon } from 'tdesign-icons-vue-next'
+import { CloseCircleFilledIcon } from 'tdesign-icons-vue-next'
 export default {
   props: ['value', 'title', 'compare', 'editMode'],
   emits: ['reset'],

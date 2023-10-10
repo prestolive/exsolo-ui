@@ -10,23 +10,15 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
-  --td-brand-color-1: #f2f3ff;
-  --td-brand-color-2: #d9e1ff;
-  --td-brand-color-3: #e22;
-  --td-brand-color-4: #e22;
-  --td-brand-color-5: #e22;
-  --td-brand-color-6: #e22;
-  --td-brand-color-7: #e22;
-  --td-brand-color-8: #e22;
-  --td-brand-color-9: #e22;
-  --td-brand-color-10: #e22;
 }
 body {
   /* --td-bg-color-container: #f9fafc;
   --td-bg-color-secondarycontainer: #fff; */
   /* --td-text-color-secondary: rgba(0, 0, 0, 0.85); */
   --td-radius-medium: 3px;
-  /* --td-text-color-brand: yellow; */
+  --td-comp-paddingTB-s: 6px;
+  --td-comp-paddingLR-s: 8px;
+  --td-text-color-brand: var(--td-brand-color-active);
   /* --td-brand-color: #e22;
   --td-brand-color-hover: #e22;
   --td-brand-color-active: #e22; */
@@ -137,7 +129,6 @@ li {
   display: flex;
   position: relative;
   justify-content: flex-start;
-  color: var(--td-text-color-brand);
   border-radius: 3px;
   margin-right: 8px;
   transition: padding-right 0.15s;

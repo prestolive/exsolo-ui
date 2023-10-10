@@ -47,7 +47,7 @@ import { watch, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useRouterTabsStore } from '@/console/store/routerTabs'
 import type { RouterTabItem } from '@/console/store/routerTabs.d'
-import ConsoleBreadcrumb from '@/console/components/ConsoleBreadcrumb.vue'
+import ConsoleBreadcrumb from './components/ConsoleBreadcrumb.vue'
 
 const route = useRoute()
 
@@ -168,6 +168,7 @@ watch(
   line-height: 28px;
   font-size: 0.8em;
   height: 28px;
+  overflow: hidden;
 }
 .c-router-tab:not(:first-child) {
   /* border-left: 1px solid #ccc; */

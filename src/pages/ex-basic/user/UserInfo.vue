@@ -42,10 +42,9 @@ import {
 } from 'tdesign-icons-vue-next'
 import { post, UserPO } from '../API'
 import { useRoute } from 'vue-router'
-import { useRouterTabsStore } from '@/console/store/routerTabs'
 import UserFormModify from './UserFormModify.vue'
 import UserFormChangePassword from './UserFormChangePassword.vue'
-import Glue from '@/console/Glue'
+import { ExPlugin } from '@/console/index.d'
 
 const props = defineProps({
   userId: {
@@ -55,7 +54,6 @@ const props = defineProps({
 })
 
 const emit = defineEmits(['change', 'finish'])
-const routerTabsStroe = useRouterTabsStore()
 
 //
 let userId: Ref
@@ -81,7 +79,7 @@ watchEffect(() => {
 })
 
 const handleModifyUser = () => {
-  Glue.drawer(
+  ExPlugin.drawer(
     { title: '修改用户', width: '520px' },
     h(UserFormModify, {
       userId: userId.value,
@@ -94,7 +92,7 @@ const handleModifyUser = () => {
 }
 
 const handleChangePassword = () => {
-  Glue.drawer(
+  ExPlugin.drawer(
     { title: '修改密码', width: '520px' },
     h(UserFormChangePassword, {
       userId: userId.value,

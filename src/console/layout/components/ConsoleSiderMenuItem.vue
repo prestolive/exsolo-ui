@@ -113,13 +113,12 @@ const getActiveStyle = (item) => {
 
 .c-menu-sub li.active {
   background: var(--td-bg-color-container-active);
-  color: var(--td-text-color-brand);
+  color: var(--td-text-color-link);
   border-right: 1px solid #ccc;
 }
 
 .c-menu-sub li.active a {
-  /* background: rgb(242, 243, 255); */
-  color: var(--td-text-color-brand);
+  color: var(--td-text-color-link);
 }
 
 .c-menu-sub li:hover {

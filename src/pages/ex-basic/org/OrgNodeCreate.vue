@@ -38,7 +38,7 @@ import { post, OrgNodePO } from '../API'
 const emit = defineEmits(['finish', 'change'])
 
 const props = defineProps({
-  schemaId: {
+  schemaCode: {
     type: String,
     default: null,
   },
@@ -62,7 +62,7 @@ const handleReset = () => {
 const handleSubmit = (context: SubmitContext) => {
   const { validateResult, firstError } = context
   if (validateResult === true) {
-    formData.value.schemaId = props.schemaId
+    formData.value.schemaCode = props.schemaCode
     post('api/ex-basic/org/create-node', {
       orgNode: formData.value,
       parentId: props.parentId,

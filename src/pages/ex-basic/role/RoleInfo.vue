@@ -13,7 +13,7 @@
               size="small"
               @click="onDelete"
             >
-              <template #icon> <delete-icon /></template>删除
+              <template #icon> <t-icon name="delete" /></template>删除
             </t-button>
           </t-space>
         </template>
@@ -53,15 +53,13 @@ import {
   MessagePlugin,
   DialogPlugin,
 } from 'tdesign-vue-next'
-import { EditIcon, DeleteIcon, LockOnIcon } from 'tdesign-icons-vue-next'
-import { post, RoleInfoVO, UserPO } from '../API'
-import { useRoute, useRouter } from 'vue-router'
-import { useRouterTabsStore } from '@/console/store/routerTabs'
+import { post, RoleInfoVO } from '../API'
+import { useRoute } from 'vue-router'
 import RoleModify from './RoleModify.vue'
 import RolePermissionSet from './RolePermissionSet.vue'
 
 import RoleUserSet from './RoleUserSet.vue'
-import Glue from '@/console/Glue'
+import { ExPlugin } from '@/console/index.d'
 
 const props = defineProps({
   roleId: {
@@ -96,7 +94,7 @@ watchEffect(() => {
 })
 
 const handleModify = () => {
-  Glue.drawer(
+  ExPlugin.drawer(
     { title: '修改名称', width: '520px' },
     h(RoleModify, {
       roleId: roleId.value,

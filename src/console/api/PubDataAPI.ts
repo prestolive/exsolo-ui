@@ -36,6 +36,10 @@ export interface Pagination {
   current?: number
   pageSize?: number
 }
+export interface CommItemVO {
+  label?: string
+  value?: string
+}
 
 interface POST {
   'api/console/picker/get': {
@@ -54,6 +58,12 @@ interface POST {
     }
     resp: PageObject<ExPickerOptionBO>
   }
+  'api/console/select/list': {
+    req: {
+      tag?: string
+    }
+    resp: CommItemVO[]
+  }
 }
 
 export function post<URL extends keyof POST>(
@@ -64,4 +74,7 @@ export function post<URL extends keyof POST>(
     url,
     data,
   })
+}
+export function download(url: string, data: object): Promise<null> {
+  return request.download({ url, data })
 }

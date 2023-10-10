@@ -22,17 +22,27 @@
             :data="items"
             hover
             line
-            expand-all
+            :expand-level="2"
             activable
             :filter="treeFilterFn"
             @active="onTreeActive"
           >
+            <template #icon="{ node }">
+              <t-icon
+                v-if="node.getChildren() && !node.expanded"
+                name="folder"
+              />
+              <t-icon
+                v-else-if="node.getChildren() && node.expanded"
+                name="folder-open-1"
+              />
+              <t-icon v-else name="control-platform" />
+            </template>
           </t-tree>
         </div>
       </div>
       <div class="right">
         <div v-if="itemQueryParam.tag" style="margin-bottom: 12px">
-          <h3>对象类型</h3>
           <t-card :title="activedItem?.name" hover-shadow>
             <template #actions>
               <t-space size="0px">
@@ -56,10 +66,7 @@
           </t-card>
         </div>
         <h3>对象查询</h3>
-        <page-table-normal
-          v-bind="pageBind"
-          class="item-table"
-        ></page-table-normal>
+        <ex-table v-bind="pageBind" class="item-table"></ex-table>
       </div>
     </div>
   </div>
@@ -85,10 +92,14 @@ import { post, ItemTagPO, ItemPO } from './API'
 import { anyTreeData, TreeNode } from '@/utils/exdash'
 
 import ItemCreate from './ItemCreate.vue'
-import Glue from '@/console/Glue'
-import PageTableNormal from '@/console/components/PageTableNormal.vue'
-import { BaseTableCol, Pagination, BaseConditionCol } from '@/console/type'
-import { useNormalPage } from '@/console/components/hooks/PageTableHooks'
+import {
+  BaseTableCol,
+  Pagination,
+  BaseConditionCol,
+  ExPlugin,
+  ExTable,
+  useExTable,
+} from '@/console/index.d'
 
 interface ItemQueryParam {
   module?: string
@@ -118,7 +129,7 @@ const conditions: BaseConditionCol[] = [
   },
 ]
 
-const pageBind = useNormalPage<ItemPO>({
+const pageBind = useExTable<ItemPO>({
   columns: columns,
   conditions: conditions,
   loadData: (param: object, pagination: Pagination) => {
@@ -187,7 +198,7 @@ const initTags = () => {
     })
 }
 const onItemCreate = () => {
-  Glue.drawer(
+  ExPlugin.drawer(
     { title: '创建对象', width: '720px' },
     h(ItemCreate, {
       tag: activedItem.value.id,

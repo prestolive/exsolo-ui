@@ -120,7 +120,7 @@ onMounted(() => {
   color: var(--td-text-color-primary);
 }
 .item-tree li {
-  padding: 6px 24px;
+  padding: 8px 24px;
   cursor: pointer;
 }
 .item-tree li:hover {

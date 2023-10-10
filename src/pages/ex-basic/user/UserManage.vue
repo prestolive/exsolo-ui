@@ -1,7 +1,7 @@
 <template>
   <div class="main">
     <h1>用户管理</h1>
-    <page-table-normal v-bind="pageBind">
+    <ex-table v-bind="pageBind">
       <template #tableBar>
         <t-button theme="primary" @click="handleAdd">
           <template #icon> <t-icon name="add" /></template>创建用户
@@ -19,12 +19,12 @@
           </t-button>
         </t-space>
       </template>
-    </page-table-normal>
+    </ex-table>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { createVNode, ref } from 'vue'
+import { createVNode } from 'vue'
 import { post, UserPO } from '../API'
 
 import {
@@ -34,10 +34,15 @@ import {
 } from 'tdesign-vue-next'
 import UserFormAdd from './UserFormAdd.vue'
 import UserInfo from './UserInfo.vue'
-import PageTableNormal from '@/console/components/PageTableNormal.vue'
-import { BaseTableCol, Pagination, BaseConditionCol } from '@/console/type'
+import {
+  BaseTableCol,
+  Pagination,
+  BaseConditionCol,
+  ExPlugin,
+  ExTable,
+  useExTable,
+} from '@/console/index.d'
 import { useNormalPage } from '@/console/components/hooks/PageTableHooks'
-import Glue from '@/console/Glue'
 
 const columns: BaseTableCol[] = [
   { colKey: 'loginCode', title: '登录名' },
@@ -69,7 +74,7 @@ const conditions: BaseConditionCol[] = [
   },
 ]
 
-const pageBind = useNormalPage<UserPO>({
+const pageBind = useExTable<UserPO>({
   columns: columns,
   conditions: conditions,
   loadData: (param: object, pagination: Pagination) => {
@@ -83,7 +88,7 @@ const pageBind = useNormalPage<UserPO>({
   },
 })
 const handleInfo = (id: string) => {
-  Glue.drawer(
+  ExPlugin.drawer(
     { title: '用户详情', width: '720px' },
     createVNode(UserInfo, {
       userId: id,
@@ -95,7 +100,7 @@ const handleInfo = (id: string) => {
   // router.push('/ex-basic/user-info/' + userId)
 }
 const handleAdd = () => {
-  Glue.drawer(
+  ExPlugin.drawer(
     { title: '创建用户', width: '720px' },
     createVNode(UserFormAdd, {
       onChange: () => {

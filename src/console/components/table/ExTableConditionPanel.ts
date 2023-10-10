@@ -1,15 +1,8 @@
 import { ref, createVNode, inject, VNode } from 'vue'
-import { BaseConditionCol, ConditionItem } from '@/console/type'
-import PageTableConditionAdapter from './PageTableConditionAdapter'
-import {
-  Button as TButton,
-  Space as TSpace,
-  Input as TInput,
-  Dropdown as TDropdown,
-  InputValue,
-} from 'tdesign-vue-next'
+import { BaseConditionCol, ConditionItem } from '@/console/index.d'
+import ExTableConditionAdapter from './ExTableConditionAdapter'
+import { Input as TInput, InputValue } from 'tdesign-vue-next'
 
-import { FilterIcon, SearchIcon } from 'tdesign-icons-vue-next'
 export default {
   props: [],
   emits: ['change', 'query'],
@@ -93,7 +86,7 @@ export default {
           const editMode = ref(true)
           if (row.schema == 'text') {
             return createVNode(
-              PageTableConditionAdapter,
+              ExTableConditionAdapter,
               {
                 value: refVal,
                 title: row.title,
@@ -139,22 +132,6 @@ export default {
         })
       )
     )
-    // nodes.push(
-    //   createVNode(
-    //     TDropdown,
-    //     { options: options, maxColumnWidth: 120, maxHeight: 200 },
-    //     () => [
-    //       createVNode(TButton, { theme: 'default', variant: 'text' }, () => [
-    //         createVNode(FilterIcon, { size: '20px' }),
-    //       ]),
-    //     ]
-    //   )
-    // )
-    // nodes.push(
-    //   createVNode(TButton, { theme: 'default', variant: 'text' }, () => [
-    //     createVNode(SearchIcon, { size: '20px' }),
-    //   ])
-    // )
     return () => nodes
   },
 }
